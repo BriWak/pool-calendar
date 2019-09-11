@@ -1,14 +1,15 @@
 @import helper._
 @import forms.TeamForm
 
-@(teamForm: Form[TeamForm])(implicit messages: Messages)
+@(teamForm: Form[TeamForm])(implicit request: RequestHeader, messages: Messages)
 
 @main("BVPA Fixture Downloader") {
 <center>
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
     <h1>BDPL Fixture Generator</h1>
 
-    @form(action = routes.HomeController.teamSelection()){
+    @form(action = routes.HomeController.downloadCalendar()){
+    @CSRF.formField
     @select(
       field = teamForm("name"),
       options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
