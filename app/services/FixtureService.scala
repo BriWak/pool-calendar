@@ -58,4 +58,8 @@ class FixtureService {
     FixtureList(allFixtures).sort()
   }
 
+
+  def getTeamFromName(name: String): Option[Team] = {
+    teams.find(_.name == name)
+  }
 }

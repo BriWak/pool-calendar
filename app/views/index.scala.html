@@ -1,5 +1,20 @@
-@()
+@import helper._
+@import forms.TeamForm
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+@(teamForm: Form[TeamForm])(implicit messages: Messages)
+
+@main("BVPA Fixture Generator") {
+<center>
+  <h1>BVPA Fixture Generator</h1>
+
+@form(action = routes.HomeController.teamSelection()){
+@select(
+  field = teamForm("name"),
+  options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
+  '_label -> "Select your team:",
+  '_showConstraints -> false
+)
+<input type="submit" value="Generate Calendar">
+}
+</center>
 }
