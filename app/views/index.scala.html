@@ -4,7 +4,7 @@
 @(teamForm: Form[TeamForm])(implicit request: RequestHeader, messages: Messages)
 
 @main("BVPA Fixture Downloader") {
-<center>
+<div class="center">
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
     <h1>BDPL Fixture Generator</h1>
 
@@ -15,7 +15,7 @@
         Symbol("_label") -> "Select the team you want to download fixtures for:",
         Symbol("_showConstraints") -> false
     )
-    <input type="submit" value="Generate Calendar">
+    <input type="submit" class="button" value="Generate Calendar">
     }
-</center>
+</div>
 }

@@ -1,0 +1,60 @@
+.center {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.button {
+color: #fff !important;
+text-transform: uppercase;
+text-decoration: none;
+background: #4CAF50;
+padding: 20px;
+border-radius: 5px;
+display: inline-block;
+border: none;
+transition: all 0.4s ease 0s;
+}
+
+.button:hover {
+background: #434343;
+letter-spacing: 1px;
+-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+transition: all 0.4s ease 0s;
+}
+
+label {
+  padding: 12px 12px 12px 12px;
+  display: inline-block;
+}
+
+select {
+display: inline-block;
+  width: 80%;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+}
+
+dd {
+    margin: 0px;
+}
+
+@media screen and (max-width: 600px) {
+  .center {
+    width: 90%;
+    margin-top: 0;
+  }
+}
