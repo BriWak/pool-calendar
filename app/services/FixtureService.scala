@@ -2,11 +2,8 @@ package services
 
 import java.util.{Calendar, Date}
 
-import utils.DateHelper._
 import models.{Fixture, FixtureList, FixtureWeek, Team}
-import java.io.File
-import java.io.PrintWriter
-import java.time.LocalDate
+import utils.DateHelper._
 
 class FixtureService {
 
@@ -26,7 +23,7 @@ class FixtureService {
     Team("Breakers C", 13),
     Team("Annitsford Irish B", 14),
     Team("Isabella A", 15),
-    Team("Charltons", 16),
+    Team("Charltons", 16)
   )
 
   val fixtureTable = Seq(
@@ -57,6 +54,8 @@ class FixtureService {
               createFixture(convertStringToDate(fixtureWeek.date1), home, away),
               createFixture(convertStringToDate(fixtureWeek.date2), away, home)
             )
+          case _ =>
+            throw new Exception("Team  does not exist")
         }
     }
     FixtureList(allFixtures).sort()
@@ -69,9 +68,7 @@ class FixtureService {
 
   def createCalendar(team: Team) = {
 
-    val fixtureList = createAllFixturesForTeam(team)
-
-        val calendarSetup = Seq(
+        val calendarStart = Seq(
           "BEGIN:VCALENDAR",
           "VERSION:2.0",
           "PRODID:-//http://fixtures.thismonkey.com/cgi-bin/build-football-fixture.pl//NONSGML v1.0//EN",
@@ -98,7 +95,7 @@ class FixtureService {
           "END:VTIMEZONE",
         )
 
-    val calenderFixtures = fixtureList.fixtures.zipWithIndex.flatMap {
+    val calenderFixtures = createAllFixturesForTeam(team).fixtures.zipWithIndex.flatMap {
       data =>
         val (fixture, index) = data
         Seq(
@@ -115,6 +112,6 @@ class FixtureService {
 
     val calenderEnd = Seq("END:VCALENDAR")
 
-    (calendarSetup ++ calenderFixtures ++ calenderEnd).mkString("\n")
+    (calendarStart ++ calenderFixtures ++ calenderEnd).mkString("\n")
   }
 }

@@ -9,12 +9,11 @@
     <h1>BDPL Fixture Generator</h1>
 
     @form(action = routes.HomeController.downloadCalendar()){
-    @CSRF.formField
     @select(
-      field = teamForm("name"),
-      options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
-      '_label -> "Select the team you want to download fixtures for:",
-      '_showConstraints -> false
+        field = teamForm("name"),
+        options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
+        Symbol("_label") -> "Select the team you want to download fixtures for:",
+        Symbol("_showConstraints") -> false
     )
     <input type="submit" value="Generate Calendar">
     }

@@ -1,27 +1,28 @@
 package controllers
 
+import models.Team
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
+import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.play.guice._
 import play.api.test._
 import play.api.test.Helpers._
+import services.FixtureService
 
-/**
- * Add your spec here.
- * You can mock out a whole application including requests, plugins etc.
- *
- * For more information, see https://www.playframework.com/documentation/latest/ScalaTestingWithScalaTest
- */
-class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
+class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
 
-  "HomeController GET" should {
+  private val mockFixtureService = mock[FixtureService]
+
+  "HomeController GET for index page" should {
 
     "render the index page from a new instance of controller" in {
-      val controller = new HomeController(stubControllerComponents())
+      val controller = new HomeController(stubControllerComponents(), mockFixtureService)
       val home = controller.index().apply(FakeRequest(GET, "/"))
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("BDPL Fixture Generator")
     }
 
     "render the index page from the application" in {
@@ -30,7 +31,7 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("BDPL Fixture Generator")
     }
 
     "render the index page from the router" in {
@@ -39,7 +40,22 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("BDPL Fixture Generator")
+    }
+  }
+
+  "HomeController GET for download" should {
+
+    "create the download from a new instance of controller" in {
+      when(mockFixtureService.getTeamFromName(any())).thenReturn(Some(Team("name","venue",1)))
+      when(mockFixtureService.createCalendar(any())).thenReturn("calendar")
+
+      val controller = new HomeController(stubControllerComponents(), mockFixtureService)
+      val result = controller.downloadCalendar().apply(FakeRequest(GET, "/download").withFormUrlEncodedBody("name" -> "validName"))
+
+      status(result) mustBe OK
+      contentType(result) mustBe Some("text/calendar")
+      contentAsString(result) must include ("calendar")
     }
   }
 }

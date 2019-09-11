@@ -6,7 +6,8 @@ import utils.DateHelper._
 
 class FixtureListSpec extends PlaySpec with MustMatchers {
 
-  "sort" must {
+  "sort" should {
+
     "sort the fixtures by ascending date" in {
       val fixtures: FixtureList = FixtureList(
         Fixture(convertStringToDate("10/10/18"), Team("Team1","Home",1), Team("Team2","Away",2), "Team1Venue"),

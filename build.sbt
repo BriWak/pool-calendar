@@ -1,14 +1,38 @@
-name := """pool-calendar"""
-organization := "com.example"
+import scoverage.ScoverageKeys
 
-version := "1.0-SNAPSHOT"
+val ScoverageExclusionPatterns = List(
+  "<empty>",
+  "app.*",
+  "config.*",
+  "views.*",
+  ".*Routes.*",
+  ".*Reverse.*"
+)
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val scoverageSettings = {
+  Seq(
+    ScoverageKeys.coverageExcludedPackages := ScoverageExclusionPatterns.mkString("", ";", ""),
+    ScoverageKeys.coverageMinimum := 85,
+    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageHighlighting := true
+  )
+}
 
-scalaVersion := "2.13.0"
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
+  .settings(
+    scoverageSettings,
+    name := """pool-calendar""",
+    organization := "com.example",
+    version := "1.0",
+    scalaVersion := "2.13.0",
+    libraryDependencies += guice,
+    libraryDependencies ++= Seq(
+      "org.scalatestplus.play" %% "scalatestplus-play"  % "4.0.3" % Test,
+      "org.mockito"             % "mockito-core"        % "3.0.0" % Test
+    )
+  )
 
-libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
