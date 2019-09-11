@@ -1,8 +1,12 @@
 package services
 
-import java.util.Date
+import java.util.{Calendar, Date}
+
 import utils.DateHelper._
 import models.{Fixture, FixtureList, FixtureWeek, Team}
+import java.io.File
+import java.io.PrintWriter
+import java.time.LocalDate
 
 class FixtureService {
 
@@ -61,5 +65,59 @@ class FixtureService {
 
   def getTeamFromName(name: String): Option[Team] = {
     teams.find(_.name == name)
+  }
+
+  def createCalendar(team: Team) = {
+
+    val fixtureList = createAllFixturesForTeam(team)
+        val fileObject = new File(s"${team.name} Fixtures.ics" )
+
+        val printWriter = new PrintWriter(fileObject)
+
+        printWriter.write(
+          "BEGIN:VCALENDAR\n" +
+          "VERSION:2.0\n" +
+          "PRODID:-//http://fixtures.thismonkey.com/cgi-bin/build-football-fixture.pl//NONSGML v1.0//EN\n" +
+          "X-WR-CALNAME:Pool Fixtures\n" +
+          "CALSCALE:GREGORIAN\n" +
+          "BEGIN:VTIMEZONE\n" +
+          "TZID:Europe/London\n" +
+          "TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London\n" +
+          "X-LIC-LOCATION:Europe/London\n" +
+          "BEGIN:DAYLIGHT\n" +
+          "TZOFFSETFROM:+0000\n" +
+          "TZOFFSETTO:+0100\n" +
+          "TZNAME:BST\n" +
+          "DTSTART:19700329T010000\n" +
+          "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n" +
+          "END:DAYLIGHT\n" +
+          "BEGIN:STANDARD\n" +
+          "TZOFFSETFROM:+0100\n" +
+          "TZOFFSETTO:+0000\n" +
+          "TZNAME:GMT\n" +
+          "DTSTART:19701025T020000\n" +
+          "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\n" +
+          "END:STANDARD\n" +
+          "END:VTIMEZONE\n"
+        )
+
+    fixtureList.fixtures.zipWithIndex.foreach {
+      data =>
+        val (fixture, index) = data
+
+        printWriter.write(
+          "BEGIN:VEVENT\n" +
+          s"DTSTAMP:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z\n" +
+          s"UID:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z-${index}\n" +
+          s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T${getTimeAsString(fixture.date)}\n" +
+          s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T220000\n" +
+          s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}\n" +
+          s"LOCATION:${fixture.venue}\n" +
+          "END:VEVENT\n"
+      )
+    }
+    printWriter.write("END:VCALENDAR")
+    printWriter.close()
+
   }
 }

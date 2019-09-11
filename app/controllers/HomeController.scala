@@ -21,11 +21,11 @@ class HomeController @Inject()(cc: ControllerComponents, fixtureService: Fixture
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index() = Action { implicit request: Request[AnyContent] =>
+  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index(TeamForm.form))
   }
 
-  def teamSelection = Action { implicit request: Request[AnyContent] =>
+  def teamSelection(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     TeamForm.form.bindFromRequest.fold(
       formWithErrors => {
         BadRequest(formWithErrors.errors.toString)
@@ -34,11 +34,12 @@ class HomeController @Inject()(cc: ControllerComponents, fixtureService: Fixture
         val team: Option[Team] = fixtureService.getTeamFromName(formData.teamName)
 
         team.fold(BadRequest("Team does not exist")) { data =>
+          fixtureService.createCalendar(data)
           val fixtureList = fixtureService.createAllFixturesForTeam(data)
           Ok(fixtureList.fixtures.mkString("\n"))
         }
       }
     )
-
   }
+
 }

@@ -5,16 +5,26 @@ import java.util.Date
 
 object DateHelper {
 
-    val DATE_FORMAT = "dd/mm/yy h:mm"
+  val DATE_FORMAT = "dd/MM/yy HH:mm"
 
-    def getDateAsString(d: Date): String = {
-      val dateFormat = new SimpleDateFormat(DATE_FORMAT)
-      dateFormat.format(d)
-    }
+  val ICAL_DATE_FORMAT = "yyyyMMdd"
+  val ICAL_TIME_FORMAT = "HHmmss"
 
-    def convertStringToDate(s: String): Date = {
-      val dateFormat = new SimpleDateFormat(DATE_FORMAT)
-      dateFormat.parse(s"$s 20:00")
-    }
+
+  def getDateAsString(d: Date): String = {
+    val dateFormat = new SimpleDateFormat(ICAL_DATE_FORMAT)
+    dateFormat.format(d)
+  }
+
+  def getTimeAsString(d: Date): String = {
+    val dateFormat = new SimpleDateFormat(ICAL_TIME_FORMAT)
+    dateFormat.format(d)
+  }
+
+  def convertStringToDate(s: String): Date = {
+    val dateFormat = new SimpleDateFormat(DATE_FORMAT)
+    dateFormat.parse(s"$s 20:00")
+  }
+
 
 }
