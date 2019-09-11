@@ -70,54 +70,51 @@ class FixtureService {
   def createCalendar(team: Team) = {
 
     val fixtureList = createAllFixturesForTeam(team)
-        val fileObject = new File(s"${team.name} Fixtures.ics" )
 
-        val printWriter = new PrintWriter(fileObject)
-
-        printWriter.write(
-          "BEGIN:VCALENDAR\n" +
-          "VERSION:2.0\n" +
-          "PRODID:-//http://fixtures.thismonkey.com/cgi-bin/build-football-fixture.pl//NONSGML v1.0//EN\n" +
-          "X-WR-CALNAME:Pool Fixtures\n" +
-          "CALSCALE:GREGORIAN\n" +
-          "BEGIN:VTIMEZONE\n" +
-          "TZID:Europe/London\n" +
-          "TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London\n" +
-          "X-LIC-LOCATION:Europe/London\n" +
-          "BEGIN:DAYLIGHT\n" +
-          "TZOFFSETFROM:+0000\n" +
-          "TZOFFSETTO:+0100\n" +
-          "TZNAME:BST\n" +
-          "DTSTART:19700329T010000\n" +
-          "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n" +
-          "END:DAYLIGHT\n" +
-          "BEGIN:STANDARD\n" +
-          "TZOFFSETFROM:+0100\n" +
-          "TZOFFSETTO:+0000\n" +
-          "TZNAME:GMT\n" +
-          "DTSTART:19701025T020000\n" +
-          "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\n" +
-          "END:STANDARD\n" +
-          "END:VTIMEZONE\n"
+        val calendarSetup = Seq(
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//http://fixtures.thismonkey.com/cgi-bin/build-football-fixture.pl//NONSGML v1.0//EN",
+          "X-WR-CALNAME:Pool Fixtures",
+          "CALSCALE:GREGORIAN",
+          "BEGIN:VTIMEZONE",
+          "TZID:Europe/London",
+          "TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London",
+          "X-LIC-LOCATION:Europe/London",
+          "BEGIN:DAYLIGHT",
+          "TZOFFSETFROM:+0000",
+          "TZOFFSETTO:+0100",
+          "TZNAME:BST",
+          "DTSTART:19700329T010000",
+          "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+          "END:DAYLIGHT",
+          "BEGIN:STANDARD",
+          "TZOFFSETFROM:+0100",
+          "TZOFFSETTO:+0000",
+          "TZNAME:GMT",
+          "DTSTART:19701025T020000",
+          "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+          "END:STANDARD",
+          "END:VTIMEZONE",
         )
 
-    fixtureList.fixtures.zipWithIndex.foreach {
+    val calenderFixtures = fixtureList.fixtures.zipWithIndex.flatMap {
       data =>
         val (fixture, index) = data
-
-        printWriter.write(
-          "BEGIN:VEVENT\n" +
-          s"DTSTAMP:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z\n" +
-          s"UID:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z-${index}\n" +
-          s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T${getTimeAsString(fixture.date)}\n" +
-          s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T220000\n" +
-          s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}\n" +
-          s"LOCATION:${fixture.venue}\n" +
-          "END:VEVENT\n"
-      )
+        Seq(
+          "BEGIN:VEVENT",
+          s"DTSTAMP:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z",
+          s"UID:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z-${index}",
+          s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T${getTimeAsString(fixture.date)}",
+          s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T220000",
+          s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}",
+          s"LOCATION:${fixture.venue}",
+          "END:VEVENT"
+        )
     }
-    printWriter.write("END:VCALENDAR")
-    printWriter.close()
 
+    val calenderEnd = Seq("END:VCALENDAR")
+
+    (calendarSetup ++ calenderFixtures ++ calenderEnd).mkString("\n")
   }
 }

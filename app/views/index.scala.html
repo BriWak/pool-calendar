@@ -3,18 +3,19 @@
 
 @(teamForm: Form[TeamForm])(implicit messages: Messages)
 
-@main("BVPA Fixture Generator") {
+@main("BVPA Fixture Downloader") {
 <center>
-  <h1>BVPA Fixture Generator</h1>
+    <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
+    <h1>BDPL Fixture Generator</h1>
 
-@form(action = routes.HomeController.teamSelection()){
-@select(
-  field = teamForm("name"),
-  options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
-  '_label -> "Select your team:",
-  '_showConstraints -> false
-)
-<input type="submit" value="Generate Calendar">
-}
+    @form(action = routes.HomeController.teamSelection()){
+    @select(
+      field = teamForm("name"),
+      options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
+      '_label -> "Select the team you want to download fixtures for:",
+      '_showConstraints -> false
+    )
+    <input type="submit" value="Generate Calendar">
+    }
 </center>
 }

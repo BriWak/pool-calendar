@@ -34,9 +34,11 @@ class HomeController @Inject()(cc: ControllerComponents, fixtureService: Fixture
         val team: Option[Team] = fixtureService.getTeamFromName(formData.teamName)
 
         team.fold(BadRequest("Team does not exist")) { data =>
-          fixtureService.createCalendar(data)
-          val fixtureList = fixtureService.createAllFixturesForTeam(data)
-          Ok(fixtureList.fixtures.mkString("\n"))
+          val calendar = fixtureService.createCalendar(data)
+
+          Ok(calendar).as("text/calendar").withHeaders(
+            "Content-Disposition" -> s"attachment; filename=${data.name} Fixtures.ics"
+          )
         }
       }
     )
