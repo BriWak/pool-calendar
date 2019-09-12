@@ -71,7 +71,7 @@ class FixtureService {
         val calendarStart = Seq(
           "BEGIN:VCALENDAR",
           "VERSION:2.0",
-          "PRODID:-//http://fixtures.thismonkey.com/cgi-bin/build-football-fixture.pl//NONSGML v1.0//EN",
+          "PRODID:-//https://bdpl-fixtures.herokuapp.com//NONSGML v1.0//EN",
           "X-WR-CALNAME:Pool Fixtures",
           "CALSCALE:GREGORIAN",
           "BEGIN:VTIMEZONE",
