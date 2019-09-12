@@ -13,17 +13,14 @@ img {
     width: 100%;
 }
 
-input[type="submit"] {
-    font-size: 16px;
-    background: #4CAF50;
-    border: none;
-    padding: 1.2em 1.2em;
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
 }
 
 .button {
-    -moz-appearance: none !important;
-    -webkit-appearance: none !important;
-    appearance: none !important;
     color: #fff !important;
     font-size: 16px;
     text-transform: uppercase;
