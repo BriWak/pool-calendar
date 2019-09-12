@@ -14,9 +14,9 @@ img {
 }
 
 .button {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+    -moz-appearance: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
     color: #fff !important;
     font-size: 16px;
     text-transform: uppercase;
