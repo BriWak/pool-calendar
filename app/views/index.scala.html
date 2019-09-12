@@ -3,10 +3,10 @@
 
 @(teamForm: Form[TeamForm])(implicit request: RequestHeader, messages: Messages)
 
-@main("BVPA Fixture Downloader") {
+@main("BDPL Fixture Downloader") {
 <div class="center">
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
-    <h1>BDPL Fixture Generator</h1>
+    <h1>BDPL Fixture Downloader</h1>
 
     @form(action = routes.HomeController.downloadCalendar()){
     @select(
