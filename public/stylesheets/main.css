@@ -16,6 +16,7 @@ img {
 .button {
     -moz-appearance: none;
     -webkit-appearance: none;
+    appearance: none;
     color: #fff !important;
     font-size: 16px;
     text-transform: uppercase;
