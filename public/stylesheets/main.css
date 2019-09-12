@@ -19,8 +19,8 @@ img {
     text-transform: uppercase;
     text-decoration: none;
     background: #4CAF50;
-    padding: 20px;
-    border-radius: 5px;
+    padding: 1.2em 1.2em;
+    border-radius: 0.3em;
     display: inline-block;
     border: none;
     transition: all 0.4s ease 0s;
