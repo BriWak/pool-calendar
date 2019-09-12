@@ -13,6 +13,13 @@ img {
     width: 100%;
 }
 
+input[type="submit"] {
+    font-size: 16px;
+    background: #4CAF50;
+    border: none;
+    padding: 1.2em 1.2em;
+}
+
 .button {
     -moz-appearance: none !important;
     -webkit-appearance: none !important;
