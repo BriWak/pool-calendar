@@ -13,33 +13,37 @@ img {
     width: 100%;
 }
 
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
-}
-
 .button {
-    color: #fff !important;
-    font-size: 16px;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #4CAF50;
-    padding: 1.2em 1.2em;
-    border-radius: 0.3em;
     display: inline-block;
     border: none;
-    transition: all 0.4s ease 0s;
+    border-radius: 0.3rem;
+    padding: 1rem 2rem;
+    margin: 0;
+    text-decoration: none;
+    background: #4CAF50;
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out,
+                transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-.button:hover {
+.button:hover,
+.button:focus {
     background: #434343;
-    letter-spacing: 1px;
-    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-    box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
-    transition: all 0.4s ease 0s;
+}
+
+.button:focus {
+    outline: 1px solid #fff;
+    outline-offset: -4px;
+}
+
+.button:active {
+    transform: scale(0.99);
 }
 
 label {
