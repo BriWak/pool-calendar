@@ -7,7 +7,7 @@
 GET     /                           controllers.HomeController.index
 GET     /download                   controllers.HomeController.downloadCalendar
 
-GET     /upload                     controllers.UploadController.index
+GET     /upload                     controllers.UploadController.uploadPage
 POST    /upload                     controllers.UploadController.uploadFile
 
 # Map static resources from the /public folder to the /assets URL path
