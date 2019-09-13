@@ -26,8 +26,7 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
 
 
   def uploadFile = Action(parse.temporaryFile) { request =>
-
-    request.body.moveFileTo(Paths.get("./app/resources/Pool fixtures.csv"), replace = true)
+    request.body.moveTo(Paths.get("./app/resources/Pool fixtures.csv"), replace = true)
     Ok("File has been uploaded")
   }
 
