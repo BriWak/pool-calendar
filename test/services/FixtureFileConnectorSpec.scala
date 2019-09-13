@@ -36,6 +36,15 @@ class FixtureFileConnectorSpec extends PlaySpec with MustMatchers with ScalaFutu
       Team("Charltons", 16)
     )
 
+  "processCsvFile" should {
 
+    "create a fixture when a valid date, home team number, and away team number is given" in {
+      val result = fileReaderService.getFixtureWeeks
+
+      true
+    }
+
+
+  }
 
 }
