@@ -1,15 +1,19 @@
 package services
 
+import connectors.FixtureFileConnector
 import models.{Fixture, FixtureList, FixtureWeek, Team}
 import org.scalatest.MustMatchers
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import utils.DateHelper.convertStringToDate
 
-class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures{
+class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures with MockitoSugar {
 
-  private val fixtureService = new FixtureService {
-    override val fixtureTable: Seq[FixtureWeek] = Seq(
+  val fixtureFileConnector = mock[FixtureFileConnector]
+  private val fixtureService = new FixtureService(fixtureFileConnector) {
+
+    override val fixtureTable: List[FixtureWeek] = List(
       FixtureWeek(Seq((1, 16), (2, 15), (3, 14), (4, 13), (5, 12), (6, 11), (7, 10), (8, 9)), "05/09/19", "09/01/20"),
       FixtureWeek(Seq((15, 1), (14, 2), (13, 3), (12, 4), (11, 5), (10, 6), (9, 7), (16, 8)), "12/09/19", "16/01/20")
     )

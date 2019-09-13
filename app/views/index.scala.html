@@ -1,7 +1,8 @@
 @import helper._
 @import forms.TeamForm
+@import models.Team
 
-@(teamForm: Form[TeamForm])(implicit request: RequestHeader, messages: Messages)
+@(teamForm: Form[TeamForm], teams: Seq[Team])(implicit request: RequestHeader, messages: Messages)
 
 @main("BDPL Fixture Downloader") {
 <div class="center">
@@ -11,7 +12,7 @@
     @form(action = routes.HomeController.downloadCalendar()){
     @select(
         field = teamForm("name"),
-        options = TeamForm.teams.map(team => (team.name.toString -> team.name.toString)),
+        options = teams.map(team => (team.name.toString -> team.name.toString)),
         Symbol("_label") -> "Select the team you want to download fixtures for:",
         Symbol("_showConstraints") -> false
     )

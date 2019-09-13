@@ -10,7 +10,7 @@ import services.FixtureService
 class HomeController @Inject()(cc: ControllerComponents, fixtureService: FixtureService) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index(TeamForm.form))
+    Ok(views.html.index(TeamForm.form, fixtureService.teams))
   }
 
   def downloadCalendar(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
