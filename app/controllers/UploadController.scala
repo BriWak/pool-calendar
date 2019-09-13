@@ -19,12 +19,15 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
 
   def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
     request.body.file("fileUpload").map { file =>
-      val videoFilename = file.filename
-      val contentType = file.contentType.get
-      file.ref.moveFileTo(new File("./app/resources/" + file.filename), replace = true)
+      val filename = file.filename
+      if (filename.takeRight(4) == ".csv") {
+        file.ref.moveFileTo(new File("./app/resources/" + file.filename), replace = true)
+        Ok("File has been uploaded")
+      } else {
+        Ok("File type is incorrect")
+      }
     }.getOrElse {
       Redirect(routes.UploadController.uploadPage)
     }
-    Ok("File has been uploaded")
   }
 }

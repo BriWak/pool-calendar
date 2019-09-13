@@ -5,7 +5,6 @@
 
 @main("BDPL Fixture Downloader") {
 
-
 @form(action = CSRF(routes.UploadController.uploadFile), Symbol("enctype") -> "multipart/form-data") {
 <input type="file" name="fileUpload">
 <p>
