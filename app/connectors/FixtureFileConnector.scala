@@ -7,7 +7,7 @@ import scala.io.Source
 class FixtureFileConnector {
 
   private def processCsvFile = {
-    val bufferedSource = Source.fromFile(System.getProperty("user.dir")+"/app/resources/Pool fixtures.csv")
+    val bufferedSource = Source.fromFile("./app/resources/Pool fixtures.csv")
     val csv: List[String] = bufferedSource.getLines.toSeq.filterNot(_ == "").toList
     bufferedSource.close
     csv
