@@ -23,6 +23,7 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
       if (filename.takeRight(4) == ".csv") {
         Logger.warn("Environment root is " + environment.rootPath)
         Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
+        Logger.warn("Files in app: " + getListOfFiles("app/"))
         file.ref.moveFileTo(new File(environment.rootPath + "/" + file.filename), replace = true)
         Ok("File has been uploaded")
       } else {
@@ -36,7 +37,7 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
   def getListOfFiles(dir: String):List[File] = {
     val d = new File(dir)
     if (d.exists && d.isDirectory) {
-      d.listFiles.filter(_.isFile).toList
+      d.listFiles.filter(x => x.isFile || x.isDirectory).toList
     } else {
       List[File]()
     }
