@@ -3,7 +3,7 @@ package controllers
 import java.io.File
 
 import javax.inject._
-import play.api.Environment
+import play.api.{Environment, Logger}
 import play.api.libs.Files
 import play.api.mvc._
 import services.FixtureService
@@ -16,12 +16,13 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
   def uploadPage: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.upload("File Upload In Play"))
   }
-  
+
   def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
     request.body.file("fileUpload").map { file =>
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
-        file.ref.moveFileTo(new File(environment.rootPath + "/app/resources/" + file.filename), replace = true)
+        Logger.warn("file details are:  " + file)
+        file.ref.moveFileTo(environment.getFile("app/resources/" + file.filename), replace = true)
         Ok("File has been uploaded")
       } else {
         Ok("File type is incorrect")
