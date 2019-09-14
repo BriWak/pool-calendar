@@ -12,12 +12,14 @@ import scala.io.Source
 class FixtureFileConnector @Inject()(environment: Environment,
                                      appConfig: ApplicationConfig) {
 
+  val logger: Logger = Logger(this.getClass)
+
   private def processCsvFile: List[String] = {
     val bufferedSource = if (Files.exists(Paths.get(environment.rootPath + "/Pool fixtures.csv"))) {
-      Logger("upload").info("Loading uploaded file from server")
+      logger.info("Loading uploaded file from server")
       Source.fromFile(environment.rootPath + "/Pool fixtures.csv")
     } else {
-      Logger("upload").warn("Loading uploaded file locally")
+      logger.info("Loading uploaded file locally")
       Source.fromFile("./app/resources/Pool fixtures.csv")
     }
     val csv: List[String] = bufferedSource.getLines.toSeq.filterNot(_ == "").toList
