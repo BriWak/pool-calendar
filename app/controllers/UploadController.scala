@@ -2,6 +2,7 @@ package controllers
 
 import java.io.File
 
+import conf.ApplicationConfig
 import javax.inject._
 import play.api.{Configuration, Environment, Logger}
 import play.api.libs.Files
@@ -14,7 +15,7 @@ import scala.concurrent.ExecutionContext
 class UploadController @Inject()(cc: ControllerComponents,
                                  fixtureService: FixtureService,
                                  environment: Environment,
-                                 config: Configuration)
+                                 appConfig: ApplicationConfig)
                                 (implicit ec: ExecutionContext
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
@@ -29,7 +30,7 @@ class UploadController @Inject()(cc: ControllerComponents,
         Logger.warn("Environment root is " + environment.rootPath)
         Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
 
-        file.ref.moveFileTo(new File(config.getString("fixtures.file.path").getOrElse("/") + filename), replace = true)
+        file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
 
         Logger.warn("Files in root after upload: " + getListOfFiles(s"${environment.rootPath}"))
         Ok("File has been uploaded")
