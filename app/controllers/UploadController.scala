@@ -3,7 +3,7 @@ package controllers
 import java.io.File
 
 import javax.inject._
-import play.api.{Environment, Logger}
+import play.api.{Configuration, Environment, Logger}
 import play.api.libs.Files
 import play.api.mvc._
 import services.FixtureService
@@ -11,7 +11,12 @@ import services.FixtureService
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class UploadController @Inject()(cc: ControllerComponents, fixtureService: FixtureService, environment: Environment)(implicit ec: ExecutionContext) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+class UploadController @Inject()(cc: ControllerComponents,
+                                 fixtureService: FixtureService,
+                                 environment: Environment,
+                                 config: Configuration)
+                                (implicit ec: ExecutionContext
+                                ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def uploadPage: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.upload("File Upload In Play"))
@@ -23,13 +28,10 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
       if (filename.takeRight(4) == ".csv") {
         Logger.warn("Environment root is " + environment.rootPath)
         Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
-        Logger.warn("Files in app: " + getListOfFiles("app/"))
-        Logger.warn("Hopefully also files in app 1: " + getListOfFiles("../../"))
-        Logger.warn("Hopefully also files in app 2: " + getListOfFiles("../../../"))
-        Logger.warn("Hopefully also files in app 3: " + getListOfFiles("../../../../"))
-        Logger.warn("Hopefully files in resources: " + getListOfFiles("../../../resources/"))
 
-        file.ref.moveFileTo(new File("../../../../app/resources/" + filename), replace = true)
+        file.ref.moveFileTo(new File(config.getString("fixtures.file.path").getOrElse("/") + filename), replace = true)
+
+        Logger.warn("Files in root after upload: " + getListOfFiles(s"${environment.rootPath}"))
         Ok("File has been uploaded")
       } else {
         Ok("File type is incorrect")
@@ -42,7 +44,7 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
   def getListOfFiles(dir: String):List[File] = {
     val d = new File(dir)
     if (d.exists && d.isDirectory) {
-      d.listFiles.filter(x => x.isFile || x.isDirectory).toList
+      d.listFiles.filter(x => x.isFile).toList
     } else {
       List[File]()
     }
