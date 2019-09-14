@@ -1,13 +1,22 @@
 package connectors
 
+import java.nio.file.{Files, Paths}
+
 import models.{FixtureWeek, Team}
+import play.api.Logger
 
 import scala.io.Source
 
 class FixtureFileConnector {
 
   private def processCsvFile = {
-    val bufferedSource = Source.fromFile("./app/resources/Pool fixtures.csv")
+    val bufferedSource = if (Files.exists(Paths.get("Pool fixtures.csv"))) {
+      Logger.warn("Loading uploaded file from server")
+      Source.fromFile("Pool fixtures.csv")
+    } else {
+      Logger.warn("Loading local file")
+      Source.fromFile("./app/resources/Pool fixtures.csv")
+    }
     val csv: List[String] = bufferedSource.getLines.toSeq.filterNot(_ == "").toList
     bufferedSource.close
     csv
