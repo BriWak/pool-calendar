@@ -24,7 +24,7 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
         Logger.warn("Environment root is " + environment.rootPath)
         Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
         Logger.warn("Files in app: " + getListOfFiles("app/"))
-        file.ref.moveFileTo(new File(environment.rootPath + "/" + file.filename), replace = true)
+        file.ref.moveFileTo(new File("app/resources/"), replace = true)
         Ok("File has been uploaded")
       } else {
         Ok("File type is incorrect")
