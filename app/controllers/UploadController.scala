@@ -21,8 +21,7 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
     request.body.file("fileUpload").map { file =>
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
-        Logger.warn("file details are:  " + file)
-        file.ref.moveFileTo(environment.getFile("app/resources/" + file.filename), replace = true)
+        file.ref.moveFileTo(new File("./fixtures/" + file.filename), replace = true)
         Ok("File has been uploaded")
       } else {
         Ok("File type is incorrect")
