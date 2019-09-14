@@ -22,13 +22,23 @@ class UploadController @Inject()(cc: ControllerComponents, fixtureService: Fixtu
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
         Logger.warn("Environment root is " + environment.rootPath)
-        file.ref.moveFileTo(new File(environment.rootPath + "/resources/" + file.filename), replace = true)
+        Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
+        file.ref.moveFileTo(new File(environment.rootPath + "/" + file.filename), replace = true)
         Ok("File has been uploaded")
       } else {
         Ok("File type is incorrect")
       }
     }.getOrElse {
       Redirect(routes.UploadController.uploadPage)
+    }
+  }
+
+  def getListOfFiles(dir: String):List[File] = {
+    val d = new File(dir)
+    if (d.exists && d.isDirectory) {
+      d.listFiles.filter(_.isFile).toList
+    } else {
+      List[File]()
     }
   }
 }
