@@ -10,9 +10,9 @@ import scala.io.Source
 class FixtureFileConnector {
 
   private def processCsvFile = {
-    val bufferedSource = if (Files.exists(Paths.get("Pool fixtures.csv"))) {
+    val bufferedSource = if (Files.exists(Paths.get("./Pool fixtures.csv"))) {
       Logger.warn("Loading uploaded file from server")
-      Source.fromFile("Pool fixtures.csv")
+      Source.fromFile("./Pool fixtures.csv")
     } else {
       Logger.warn("Loading local file")
       Source.fromFile("./app/resources/Pool fixtures.csv")
