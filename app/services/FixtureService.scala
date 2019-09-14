@@ -9,9 +9,9 @@ import utils.DateHelper._
 
 class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
 
-  val teams = fixtureFileConnector.getTeams
+  lazy val teams = fixtureFileConnector.getTeams
 
-  val fixtureTable = fixtureFileConnector.getFixtureWeeks
+  lazy val fixtureTable = fixtureFileConnector.getFixtureWeeks
 
   def createFixture(date: Date, homeTeam: Int, awayTeam: Int): Fixture = {
     val home = teams.find(_.number == homeTeam)

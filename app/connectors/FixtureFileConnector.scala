@@ -24,11 +24,11 @@ class FixtureFileConnector @Inject()(environment: Environment,
   
   private def processCsvFile = {
     val bufferedSource = if (Files.exists(Paths.get(environment.rootPath + "/Pool fixtures.csv"))) {
-      Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
+      Logger.warn("Files in root when processing csv: " + getListOfFiles(s"${environment.rootPath}"))
       Logger.warn("Loading uploaded file from server")
       Source.fromFile(environment.rootPath + "/Pool fixtures.csv")
     } else {
-      Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
+      Logger.warn("Files in root when processing csv (local): " + getListOfFiles(s"${environment.rootPath}"))
       Logger.warn("Loading local file")
       Source.fromFile("./app/resources/Pool fixtures.csv")
     }
