@@ -26,7 +26,7 @@ class UploadController @Inject()(cc: ControllerComponents,
     request.body.file("fileUpload").map { file =>
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
-        Logger.warn("Environment root is " + environment.rootPath)
+        Logger.warn("Environment root is " + System.getenv("").rootPath)
         Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
 
         file.ref.moveFileTo(new File(config.getString("fixtures.file.path").getOrElse("/") + filename), replace = true)
