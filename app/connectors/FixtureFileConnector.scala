@@ -5,6 +5,7 @@ import java.nio.file.{Files, Paths}
 import com.google.inject.Inject
 import conf.ApplicationConfig
 import models.{FixtureWeek, Team}
+import org.slf4j.LoggerFactory
 import play.api.{Environment, Logger}
 
 import scala.io.Source
@@ -12,7 +13,7 @@ import scala.io.Source
 class FixtureFileConnector @Inject()(environment: Environment,
                                      appConfig: ApplicationConfig) {
 
-  val logger: Logger = Logger(this.getClass)
+  val logger = LoggerFactory.getLogger(this.getClass)
 
   private def processCsvFile: List[String] = {
     val bufferedSource = if (Files.exists(Paths.get(environment.rootPath + "/Pool fixtures.csv"))) {
