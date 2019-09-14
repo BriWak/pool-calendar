@@ -4,7 +4,7 @@ import java.io.File
 
 import conf.ApplicationConfig
 import javax.inject._
-import play.api.{Configuration, Environment, Logger}
+import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
 import services.FixtureService
@@ -27,10 +27,7 @@ class UploadController @Inject()(cc: ControllerComponents,
     request.body.file("fileUpload").map { file =>
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
-        Logger.warn("Environment root is " + environment.rootPath)
-        Logger.warn("Files in root: " + getListOfFiles(s"${environment.rootPath}"))
         file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
-        Logger.warn("File saved: " + getListOfFiles(s"${environment.rootPath}"))
         Ok("File has been uploaded")
       } else {
         Ok("File type is incorrect")
@@ -40,12 +37,4 @@ class UploadController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def getListOfFiles(dir: String):List[File] = {
-    val d = new File(dir)
-    if (d.exists && d.isDirectory) {
-      d.listFiles.filter(x => x.isFile).toList
-    } else {
-      List[File]()
-    }
-  }
 }

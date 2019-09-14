@@ -4,14 +4,14 @@ import java.util.{Calendar, Date}
 
 import com.google.inject.Inject
 import connectors.FixtureFileConnector
-import models.{Fixture, FixtureList, Team}
+import models.{Fixture, FixtureList, FixtureWeek, Team}
 import utils.DateHelper._
 
 class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
 
-  lazy val teams = fixtureFileConnector.getTeams
+  lazy val teams: Seq[Team] = fixtureFileConnector.getTeams
 
-  lazy val fixtureTable = fixtureFileConnector.getFixtureWeeks
+  lazy val fixtureTable: List[FixtureWeek] = fixtureFileConnector.getFixtureWeeks
 
   def createFixture(date: Date, homeTeam: Int, awayTeam: Int): Fixture = {
     val home = teams.find(_.number == homeTeam)
@@ -36,7 +36,7 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
               createFixture(convertStringToDate(fixtureWeek.date2), away, home)
             )
           case _ =>
-            throw new Exception("Team  does not exist")
+            throw new Exception("Team does not exist")
         }
     }
     FixtureList(allFixtures).sort()
@@ -47,7 +47,7 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
     teams.find(_.name == name)
   }
 
-  def createCalendar(team: Team) = {
+  def createCalendar(team: Team): String = {
 
         val calendarStart = Seq(
           "BEGIN:VCALENDAR",

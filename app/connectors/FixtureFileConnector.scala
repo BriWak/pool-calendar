@@ -1,6 +1,5 @@
 package connectors
 
-import java.io.File
 import java.nio.file.{Files, Paths}
 
 import com.google.inject.Inject
@@ -13,30 +12,18 @@ import scala.io.Source
 class FixtureFileConnector @Inject()(environment: Environment,
                                      appConfig: ApplicationConfig) {
 
-  def getListOfFiles(dir: String):List[File] = {
-    val d = new File(dir)
-    if (d.exists && d.isDirectory) {
-      d.listFiles.filter(x => x.isFile).toList
-    } else {
-      List[File]()
-    }
-  }
-  
-  private def processCsvFile = {
+  private def processCsvFile: List[String] = {
     val bufferedSource = if (Files.exists(Paths.get(environment.rootPath + "/Pool fixtures.csv"))) {
-      Logger.warn("Files in root when processing csv: " + getListOfFiles(s"${environment.rootPath}"))
-      Logger.warn("Loading uploaded file from server")
+      Logger("upload").info("Loading uploaded file from server")
       Source.fromFile(environment.rootPath + "/Pool fixtures.csv")
     } else {
-      Logger.warn("Files in root when processing csv (local): " + getListOfFiles(s"${environment.rootPath}"))
-      Logger.warn("Loading local file")
+      Logger("upload").warn("Loading uploaded file locally")
       Source.fromFile("./app/resources/Pool fixtures.csv")
     }
     val csv: List[String] = bufferedSource.getLines.toSeq.filterNot(_ == "").toList
     bufferedSource.close
     csv
   }
-
 
   def getFixtureWeeks: List[FixtureWeek] = {
 
