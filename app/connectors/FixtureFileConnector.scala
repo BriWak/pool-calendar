@@ -2,17 +2,20 @@ package connectors
 
 import java.nio.file.{Files, Paths}
 
+import com.google.inject.Inject
+import conf.ApplicationConfig
 import models.{FixtureWeek, Team}
-import play.api.Logger
+import play.api.{Environment, Logger}
 
 import scala.io.Source
 
-class FixtureFileConnector {
+class FixtureFileConnector @Inject()(environment: Environment,
+                                     appConfig: ApplicationConfig) {
 
   private def processCsvFile = {
-    val bufferedSource = if (Files.exists(Paths.get("/Pool fixtures.csv"))) {
+    val bufferedSource = if (Files.exists(Paths.get(environment.rootPath + "/Pool fixtures.csv"))) {
       Logger.warn("Loading uploaded file from server")
-      Source.fromFile("/Pool fixtures.csv")
+      Source.fromFile(environment.rootPath + "/Pool fixtures.csv")
     } else {
       Logger.warn("Loading local file")
       Source.fromFile("./app/resources/Pool fixtures.csv")
