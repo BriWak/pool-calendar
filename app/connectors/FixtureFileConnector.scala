@@ -16,10 +16,10 @@ class FixtureFileConnector @Inject()(environment: Environment,
 
   private def processCsvFile: List[String] = {
     val bufferedSource = if (Files.exists(Paths.get(environment.rootPath + "/Pool fixtures.csv"))) {
-      Logger.info("Loading uploaded file from server")
+      Logger.warn("Loading uploaded file from server")
       Source.fromFile(environment.rootPath + "/Pool fixtures.csv")
     } else {
-      Logger.info("Loading uploaded file locally")
+      Logger.warn("Loading uploaded file locally")
       Source.fromFile("./app/resources/Pool fixtures.csv")
     }
     val csv: List[String] = bufferedSource.getLines.toSeq.filterNot(_ == "").toList
