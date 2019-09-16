@@ -1,18 +1,35 @@
 package services
 
+import conf.ApplicationConfig
 import connectors.FixtureFileConnector
-import models.{Fixture, FixtureList, FixtureWeek, Team}
+import models.{FixtureWeek, Team}
 import org.scalatest.MustMatchers
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import utils.DateHelper.convertStringToDate
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-class FixtureFileConnectorSpec extends PlaySpec with MustMatchers with ScalaFutures{
+class FixtureFileConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with MustMatchers with MockitoSugar with ScalaFutures {
 
-  private val fileReaderService = new FixtureFileConnector
+  val mockAppConfig = mock[ApplicationConfig]
 
+  private val fixtureFileConnector = new FixtureFileConnector(app.environment, mockAppConfig)
 
-  val fixtureTable: Seq[FixtureWeek] = Seq(
+  val processedCsv = List(
+    "Super League,,,,,,,,,,",
+    "1,1-16,2-15,3-14,4-13,5-12,6-11,7-10,8-9,05/09/19,09/01/20",
+    "2,15-1,14-2,13-3,12-4,11-5,10-6,9-7,16-8,12/09/19,16/01/20",
+    "1 Newsham Side Club,,,,,,9 Kings Arms,,,,",
+    "2 Seahorse,,,,,,10 Comrades B,,,,",
+    "3 Comrades A,,,,,,11 Services B,,,,",
+    "4 Bedlington Station,,,,,,12 Market Tavern ,,,,",
+    "5 Sports Club,,,,,,13 Breakers C ,,,,",
+    "6 Breakers A,,,,,,14 Annitsford Irish B,,,,",
+    "7 Annitsford Irish A,,,,,,15  Isabella A,,,,",
+    "8 Breakers E,,,,,,16 Charltons,,,,"
+  )
+
+  val fixtureTable: List[FixtureWeek] = List(
       FixtureWeek(Seq((1, 16), (2, 15), (3, 14), (4, 13), (5, 12), (6, 11), (7, 10), (8, 9)), "05/09/19", "09/01/20"),
       FixtureWeek(Seq((15, 1), (14, 2), (13, 3), (12, 4), (11, 5), (10, 6), (9, 7), (16, 8)), "12/09/19", "16/01/20")
     )
@@ -36,15 +53,22 @@ class FixtureFileConnectorSpec extends PlaySpec with MustMatchers with ScalaFutu
       Team("Charltons", 16)
     )
 
-  "processCsvFile" should {
+  "getFixtureWeeks" should {
 
-    "create a fixture when a valid date, home team number, and away team number is given" in {
-      val result = fileReaderService.getFixtureWeeks
+    "create a list of fixtureWeeks when a valid csv file has been processed" in {
+      val result = fixtureFileConnector.getFixtureWeeks(processedCsv)
 
-      true
+      result mustEqual fixtureTable
     }
+  }
 
+  "getTeams" should {
 
+    "create a list of teams when a valid csv file has been processed" in {
+      val result = fixtureFileConnector.getTeams(processedCsv)
+
+      result mustEqual teams
+    }
   }
 
 }

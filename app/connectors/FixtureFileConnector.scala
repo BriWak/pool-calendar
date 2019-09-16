@@ -27,16 +27,14 @@ class FixtureFileConnector @Inject()(environment: Environment,
     csv
   }
 
-  def getFixtureWeeks: List[FixtureWeek] = {
+  def getFixtureWeeks(processedCsv: List[String] = processCsvFile): List[FixtureWeek] = {
 
     case class TempFixtureWeek(fixtures: Seq[(Int, Int)], date1: Option[String], date2: Option[String])
-
-    val csv = processCsvFile
 
     val numOnlyPattern = """^\d+$""".r
     val fixturePattern = """^(\d+)-(\d+)$""".r
 
-    val rows: List[List[String]] = csv.map { _.split(",").map(_.trim).toList}
+    val rows: List[List[String]] = processedCsv.map { _.split(",").map(_.trim).toList}
 
     val fixtureRows: List[List[String]] = rows.collect{case a if numOnlyPattern.matches(a.headOption.getOrElse("")) => a }
 
@@ -61,13 +59,11 @@ class FixtureFileConnector @Inject()(environment: Environment,
     }
   }
 
-  def getTeams = {
-
-    val csv = processCsvFile
+  def getTeams(processedCsv: List[String] = processCsvFile): Seq[Team] = {
 
     val teamPattern = """(\d+)\ ([a-zA-z -]+)""".r
 
-    teamPattern.findAllMatchIn(csv.mkString).map(m => Team(m.group(2),m.group(1).toInt)).toSeq.sortBy(_.number)
+    teamPattern.findAllMatchIn(processedCsv.mkString("\n")).map(m => Team(m.group(2).trim,m.group(1).toInt)).toSeq.sortBy(_.number)
 
   }
 }

@@ -14,5 +14,7 @@ class ApplicationConfig @Inject()(
   }
 
   lazy val fixturesFilePath: String = loadConfig("fixtures.file.path")
+  lazy val fixtureStartTime: String = loadConfig("fixture.start.time")
+  lazy val fixtureEndTime: String = loadConfig("fixture.end.time")
 
 }

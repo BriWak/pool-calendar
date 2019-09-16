@@ -5,7 +5,7 @@ import java.util.Date
 
 object DateHelper {
 
-  val DATE_FORMAT = "dd/MM/yy HH:mm"
+  val DATE_FORMAT = "dd/MM/yy"
 
   val ICAL_DATE_FORMAT = "yyyyMMdd"
   val ICAL_TIME_FORMAT = "HHmmss"
@@ -23,7 +23,7 @@ object DateHelper {
 
   def convertStringToDate(s: String): Date = {
     val dateFormat = new SimpleDateFormat(DATE_FORMAT)
-    dateFormat.parse(s"$s 20:00")
+    dateFormat.parse(s)
   }
 
 

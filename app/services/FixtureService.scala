@@ -3,15 +3,16 @@ package services
 import java.util.{Calendar, Date}
 
 import com.google.inject.Inject
+import conf.ApplicationConfig
 import connectors.FixtureFileConnector
 import models.{Fixture, FixtureList, FixtureWeek, Team}
 import utils.DateHelper._
 
-class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
+class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector, appConfig: ApplicationConfig){
 
-  lazy val teams: Seq[Team] = fixtureFileConnector.getTeams
+  lazy val teams: Seq[Team] = fixtureFileConnector.getTeams()
 
-  lazy val fixtureTable: List[FixtureWeek] = fixtureFileConnector.getFixtureWeeks
+  lazy val fixtureTable: List[FixtureWeek] = fixtureFileConnector.getFixtureWeeks()
 
   def createFixture(date: Date, homeTeam: Int, awayTeam: Int): Fixture = {
     val home = teams.find(_.number == homeTeam)
@@ -49,32 +50,35 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
 
   def createCalendar(team: Team): String = {
 
-        val calendarStart = Seq(
-          "BEGIN:VCALENDAR",
-          "VERSION:2.0",
-          "PRODID:-//https://bdpl-fixtures.herokuapp.com//NONSGML v1.0//EN",
-          "X-WR-CALNAME:Pool Fixtures",
-          "CALSCALE:GREGORIAN",
-          "BEGIN:VTIMEZONE",
-          "TZID:Europe/London",
-          "TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London",
-          "X-LIC-LOCATION:Europe/London",
-          "BEGIN:DAYLIGHT",
-          "TZOFFSETFROM:+0000",
-          "TZOFFSETTO:+0100",
-          "TZNAME:BST",
-          "DTSTART:19700329T010000",
-          "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
-          "END:DAYLIGHT",
-          "BEGIN:STANDARD",
-          "TZOFFSETFROM:+0100",
-          "TZOFFSETTO:+0000",
-          "TZNAME:GMT",
-          "DTSTART:19701025T020000",
-          "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
-          "END:STANDARD",
-          "END:VTIMEZONE",
-        )
+    val startTime: String = appConfig.fixtureStartTime
+    val endTime: String = appConfig.fixtureEndTime
+
+    val calendarStart = Seq(
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//https://bdpl-fixtures.herokuapp.com//NONSGML v1.0//EN",
+      "X-WR-CALNAME:Pool Fixtures",
+      "CALSCALE:GREGORIAN",
+      "BEGIN:VTIMEZONE",
+      "TZID:Europe/London",
+      "TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London",
+      "X-LIC-LOCATION:Europe/London",
+      "BEGIN:DAYLIGHT",
+      "TZOFFSETFROM:+0000",
+      "TZOFFSETTO:+0100",
+      "TZNAME:BST",
+      "DTSTART:19700329T010000",
+      "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+      "END:DAYLIGHT",
+      "BEGIN:STANDARD",
+      "TZOFFSETFROM:+0100",
+      "TZOFFSETTO:+0000",
+      "TZNAME:GMT",
+      "DTSTART:19701025T020000",
+      "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+      "END:STANDARD",
+      "END:VTIMEZONE",
+    )
 
     val calenderFixtures = createAllFixturesForTeam(team).fixtures.zipWithIndex.flatMap {
       data =>
@@ -83,8 +87,8 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector){
           "BEGIN:VEVENT",
           s"DTSTAMP:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z",
           s"UID:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z-${index}",
-          s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T${getTimeAsString(fixture.date)}",
-          s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T220000",
+          s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T$startTime",
+          s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T$endTime",
           s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}",
           s"LOCATION:${fixture.venue}",
           "END:VEVENT"
