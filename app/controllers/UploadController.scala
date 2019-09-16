@@ -3,11 +3,13 @@ package controllers
 import java.io.File
 
 import conf.ApplicationConfig
+import controllers.auth.AuthAction
 import javax.inject._
 import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
 import services.FixtureService
+import views.html.upload
 
 import scala.concurrent.ExecutionContext
 
@@ -15,12 +17,13 @@ import scala.concurrent.ExecutionContext
 class UploadController @Inject()(cc: ControllerComponents,
                                  fixtureService: FixtureService,
                                  environment: Environment,
-                                 appConfig: ApplicationConfig)
+                                 appConfig: ApplicationConfig,
+                                 authAction: AuthAction)
                                 (implicit ec: ExecutionContext
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def uploadPage: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.upload("File Upload In Play"))
+  def uploadPage: Action[AnyContent] = authAction { implicit request: Request[AnyContent] =>
+    Ok(upload("File Upload In Play"))
   }
 
   def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>

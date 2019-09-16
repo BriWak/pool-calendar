@@ -1,0 +1,18 @@
+@import forms.UserLoginForm
+@import helper._
+
+
+@(loginForm: Form[UserLoginForm])(implicit request: Request[_], messagesProvider: MessagesProvider)
+@main("Login") {
+
+<h2>Enter your login details</h2>
+
+@form(action = controllers.routes.LoginController.onSubmit) {
+@CSRF.formField
+@inputText(loginForm("username"), Symbol("placeholder") -> "Enter your username", Symbol("autocomplete") -> "username", Symbol("_showConstraints") -> false)
+<br>
+@inputPassword(loginForm("password"), Symbol("placeholder") -> "Enter your password",Symbol("autocomplete") -> "password", Symbol("_showConstraints") -> false)
+<br>
+<input type="submit" value="submit">
+}
+}

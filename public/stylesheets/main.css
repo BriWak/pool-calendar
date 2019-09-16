@@ -1,6 +1,7 @@
 .center {
     text-align: center;
     margin: auto;
+    margin-top: 10px;
     width: 50%;
     border: 3px solid green;
     padding: 10px;
@@ -66,9 +67,13 @@ dd {
     margin: 0px;
 }
 
+p {
+    font-size: 18px;
+}
+
 @media screen and (max-width: 600px) {
   .center {
     width: 90%;
-    margin-top: 0;
+    margin-top: 5px;
   }
 }

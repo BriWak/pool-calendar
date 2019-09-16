@@ -3,7 +3,7 @@
 
 @(message: String)(implicit request: RequestHeader, messages: Messages)
 
-@main("BDPL Fixture Downloader") {
+@main("Upload Fixtures") {
 
 @form(action = CSRF(routes.UploadController.uploadFile), Symbol("enctype") -> "multipart/form-data") {
 <input type="file" name="fileUpload">

@@ -7,8 +7,8 @@
 @main("BDPL Fixture Downloader") {
 <div class="center">
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
-    <h1>BDPL Fixture Downloader</h1>
-
+    <h1>Download Fixtures</h1>
+    <p>This will download a calendar containing all of the selected team's fixtures for the current season and give you the option to add them to your calendar.</p>
     @form(action = routes.HomeController.downloadCalendar()){
     @select(
         field = teamForm("name"),
@@ -16,7 +16,7 @@
         Symbol("_label") -> "Select the team you want to download fixtures for:",
         Symbol("_showConstraints") -> false
     )
-    <input type="submit" class="button" value="Generate Calendar">
+    <input type="submit" class="button" value="Download Calendar">
     }
 </div>
 }
