@@ -19,10 +19,10 @@ class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures wi
   private val fixtureService = new FixtureService(mockFixtureFileConnector, appConfig) {
 
     override lazy val fixtureTable: List[FixtureWeek] = List(
-      FixtureWeek(Seq((1, 16), (2, 15), (3, 14), (4, 13), (5, 12), (6, 11), (7, 10), (8, 9)), "05/09/19", "09/01/20"),
-      FixtureWeek(Seq((15, 1), (14, 2), (13, 3), (12, 4), (11, 5), (10, 6), (9, 7), (16, 8)), "12/09/19", "16/01/20")
+      FixtureWeek(List((1, 16), (2, 15), (3, 14), (4, 13), (5, 12), (6, 11), (7, 10), (8, 9)), "05/09/19", "09/01/20"),
+      FixtureWeek(List((15, 1), (14, 2), (13, 3), (12, 4), (11, 5), (10, 6), (9, 7), (16, 8)), "12/09/19", "16/01/20")
     )
-    override lazy val teams: Seq[Team] = Seq(
+    override lazy val teams: List[Team] = List(
       Team("Newsham Side Club", 1),
       Team("Seahorse", 2),
       Team("Comrades A", 3),

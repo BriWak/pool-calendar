@@ -10,7 +10,7 @@ import utils.DateHelper._
 
 class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector, appConfig: ApplicationConfig){
 
-  lazy val teams: Seq[Team] = fixtureFileConnector.getTeams()
+  lazy val teams: List[Team] = fixtureFileConnector.getTeams()
 
   lazy val fixtureTable: List[FixtureWeek] = fixtureFileConnector.getFixtureWeeks()
 
@@ -32,7 +32,7 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector, appCo
 
         fixture match {
           case Some((home, away)) =>
-            Seq(
+            List(
               createFixture(convertStringToDate(fixtureWeek.date1), home, away),
               createFixture(convertStringToDate(fixtureWeek.date2), away, home)
             )
@@ -53,7 +53,7 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector, appCo
     val startTime: String = appConfig.fixtureStartTime
     val endTime: String = appConfig.fixtureEndTime
 
-    val calendarStart = Seq(
+    val calendarStart = List(
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
       "PRODID:-//https://bdpl-fixtures.herokuapp.com//NONSGML v1.0//EN",
@@ -83,7 +83,7 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector, appCo
     val calenderFixtures = createAllFixturesForTeam(team).fixtures.zipWithIndex.flatMap {
       data =>
         val (fixture, index) = data
-        Seq(
+        List(
           "BEGIN:VEVENT",
           s"DTSTAMP:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z",
           s"UID:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z-${index}",
@@ -95,7 +95,7 @@ class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector, appCo
         )
     }
 
-    val calenderEnd = Seq("END:VCALENDAR")
+    val calenderEnd = List("END:VCALENDAR")
 
     (calendarStart ++ calenderFixtures ++ calenderEnd).mkString("\n")
   }

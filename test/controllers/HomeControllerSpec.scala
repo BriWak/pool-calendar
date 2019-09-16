@@ -18,7 +18,7 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
     "render the index page from a new instance of controller" in {
 
-      when(mockFixtureService.teams).thenReturn(Seq.empty)
+      when(mockFixtureService.teams).thenReturn(List.empty)
       val controller = new HomeController(stubControllerComponents(), mockFixtureService)
       val home = controller.index().apply(FakeRequest(GET, "/"))
 

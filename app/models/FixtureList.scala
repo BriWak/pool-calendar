@@ -1,6 +1,6 @@
 package models
 
-case class FixtureList(fixtures: Seq[Fixture]) {
+case class FixtureList(fixtures: List[Fixture]) {
 
   def sort(): FixtureList = {
     FixtureList(fixtures.sortBy(_.date))
@@ -8,6 +8,6 @@ case class FixtureList(fixtures: Seq[Fixture]) {
 }
 
 object FixtureList {
-  def apply(fixtures: Fixture*)(implicit d: DummyImplicit) = new FixtureList(Seq(fixtures: _*))
+  def apply(fixtures: Fixture*)(implicit d: DummyImplicit) = new FixtureList(List(fixtures: _*))
 
 }
