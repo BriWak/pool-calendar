@@ -26,7 +26,7 @@ class UploadController @Inject()(cc: ControllerComponents,
     Ok(upload("File Upload"))
   }
 
-  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { implicit request =>
+  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = authAction(parse.multipartFormData) { implicit request =>
     request.body.file("fileUpload").map { file =>
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {

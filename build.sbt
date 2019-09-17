@@ -28,6 +28,7 @@ lazy val root = (project in file("."))
     scalaVersion := "2.13.0",
     libraryDependencies += guice,
     libraryDependencies ++= Seq(
+      "org.mindrot"             % "jbcrypt"             % "0.3m",
       "org.scalatestplus.play" %% "scalatestplus-play"  % "4.0.3" % Test,
       "org.mockito"             % "mockito-core"        % "3.0.0" % Test
     )
