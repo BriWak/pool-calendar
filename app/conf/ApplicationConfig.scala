@@ -9,8 +9,12 @@ class ApplicationConfig @Inject()(
                                    environment: Environment
                                  ) {
 
-  private def loadConfig(key: String): String = {
+  private def loadLocalConfig(key: String): String = {
     configuration.get[String](key)
+  }
+
+  private def loadConfig(key: String): String = {
+    scala.util.Properties.envOrElse(key, loadLocalConfig(key))
   }
 
   lazy val fixturesFilePath: String = loadConfig("fixtures.file.path")
