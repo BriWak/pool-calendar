@@ -23,17 +23,17 @@ class UploadController @Inject()(cc: ControllerComponents,
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def uploadPage: Action[AnyContent] = authAction { implicit request: Request[AnyContent] =>
-    Ok(upload("File Upload In Play"))
+    Ok(upload("File Upload"))
   }
 
-  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
+  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { implicit request =>
     request.body.file("fileUpload").map { file =>
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
         file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
-        Ok("File has been uploaded")
+        Ok(upload("The file has been successfully uploaded", true))
       } else {
-        Ok("File type is incorrect")
+        Ok(upload("The file type is incorrect, only CSV files are supported", true))
       }
     }.getOrElse {
       Redirect(routes.UploadController.uploadPage)

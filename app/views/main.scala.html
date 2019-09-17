@@ -21,17 +21,16 @@
     </head>
     <body>
 
-    <ul class="topnav">
-        <li class="title">BDPL Fixtures</li>
-        <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index().url}">Home</a></li>
-        <li><a class="@("active".when(title == "View Fixtures"))" href="#view">View Fixtures</a></li>
-        <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.uploadPage().url}">Admin</a></li>
-    </ul>
+        <ul class="topnav">
+            <li class="title">BDPL Fixtures</li>
+            <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index().url}">Home</a></li>
+            <li><a class="@("active".when(title == "View Fixtures"))" href="#view">View Fixtures</a></li>
+            <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.uploadPage().url}">Admin</a></li>
+        </ul>
 
-
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
+        <div class="content">
+            @content
+        </div>
 
       <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
     </body>

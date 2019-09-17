@@ -1,4 +1,4 @@
-.center {
+.content {
     text-align: center;
     margin: auto;
     margin-top: 10px;
@@ -71,9 +71,69 @@ p {
     font-size: 18px;
 }
 
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    color: black;
+}
+
+.inputfile:focus + label,
+.inputfile.has-focus + label,
+.inputfile + label:hover {
+    color: black;
+}
+
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+	outline: green auto 5px;
+}
+
+
+
+.filealert {
+    color: black;
+    padding: 20px;
+    background-color: lightgrey;
+    outline: green solid 3px;
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    width: 50%;
+    align: center;
+}
+
+.closebtn {
+    outline: grey solid 2px;
+    margin-left: 15px;
+    padding: 0px 2px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
 @media screen and (max-width: 600px) {
-  .center {
+  .content {
     width: 90%;
     margin-top: 5px;
+  }
+
+  .filealert {
+    width: 80%;
   }
 }
