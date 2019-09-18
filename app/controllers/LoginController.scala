@@ -29,7 +29,6 @@ class LoginController @Inject()(cc: ControllerComponents,
         userData => {
           val username = userData.username
           val password = userData.password
-          //Todo: Change password to UUID once working
           if (passwordService.checkHash(s"$username/$password", "$2a$10$y5xXcLpJCO3UNDyOwQzoteTjvFFgjELglh8gb2Rqt7yx0ZnMmIhQi")) {
           Redirect(controllers.routes.UploadController.uploadPage())
             .addingToSession(

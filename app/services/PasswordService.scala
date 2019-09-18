@@ -1,7 +1,9 @@
 package services
 
+import com.google.inject.Singleton
 import org.mindrot.jbcrypt.BCrypt
 
+@Singleton
 class PasswordService {
 
    def getHash(str: String) : String = {
