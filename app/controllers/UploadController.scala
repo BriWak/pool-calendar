@@ -8,7 +8,7 @@ import javax.inject._
 import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
-import services.FixtureService
+import services.{FixtureService, UploadService}
 import views.html.upload
 
 import scala.concurrent.ExecutionContext
@@ -18,7 +18,8 @@ class UploadController @Inject()(cc: ControllerComponents,
                                  fixtureService: FixtureService,
                                  environment: Environment,
                                  appConfig: ApplicationConfig,
-                                 authAction: AuthAction)
+                                 authAction: AuthAction,
+                                 uploadService: UploadService)
                                 (implicit ec: ExecutionContext
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
@@ -31,6 +32,9 @@ class UploadController @Inject()(cc: ControllerComponents,
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
         file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
+        uploadService.uploadAllTeams.map{ team =>
+          uploadService.uploadAllFixturesForTeam(team)
+        }
         Ok(upload("The file has been successfully uploaded", true))
       } else {
         Ok(upload("The file type is incorrect, only CSV files are supported", true))

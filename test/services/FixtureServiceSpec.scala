@@ -60,7 +60,7 @@ class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures wi
   "createAllFixturesForTeam" should {
 
     "generate a sorted FixtureList with all available fixtures for a team" in {
-      val result = fixtureService.createAllFixturesForTeam(Team("Annitsford Irish B", 14))
+      val result = fixtureService.getAllFixturesForTeam(Team("Annitsford Irish B", 14))
 
       val expectedResult = FixtureList(
         Fixture(convertStringToDate("05/09/19"), Team("Comrades A", 3), Team("Annitsford Irish B", 14)),

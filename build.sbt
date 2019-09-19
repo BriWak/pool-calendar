@@ -28,9 +28,14 @@ lazy val root = (project in file("."))
     scalaVersion := "2.13.0",
     libraryDependencies += guice,
     libraryDependencies ++= Seq(
+      "org.reactivemongo"      %% "play2-reactivemongo" % "0.18.6-play27",
       "org.mindrot"             % "jbcrypt"             % "0.3m",
       "org.scalatestplus.play" %% "scalatestplus-play"  % "4.0.3" % Test,
       "org.mockito"             % "mockito-core"        % "3.0.0" % Test
+    ),
+    dependencyOverrides ++= Seq(
+      "com.typesafe.akka" %% "akka-actor" % "2.5.25",
+      "com.typesafe.akka" %% "akka-slf4j" % "2.5.25"
     )
   )
 

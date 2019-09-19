@@ -6,11 +6,16 @@ import com.google.inject.Inject
 import conf.ApplicationConfig
 import models.{FixtureWeek, Team}
 import play.api.{Environment, Logger}
+import repositories.{MongoFixtureRepository, MongoTeamRepository}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.io.Source
 
 class FixtureFileConnector @Inject()(environment: Environment,
-                                     appConfig: ApplicationConfig) {
+                                     appConfig: ApplicationConfig,
+                                     teamMongoService: MongoTeamRepository,
+                                     fixtureMongoService: MongoFixtureRepository) {
 
   val logger: Logger = Logger("play")
 
@@ -59,7 +64,7 @@ class FixtureFileConnector @Inject()(environment: Environment,
     }
   }
 
-  def getTeams(processedCsv: List[String] = processCsvFile): List[Team] = {
+  def getTeams(processedCsv: List[String] = processCsvFile) = {
 
     val teamPattern = """(\d+)\ ([a-zA-z -]+)""".r
 

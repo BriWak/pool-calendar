@@ -3,32 +3,39 @@ package controllers
 import forms.TeamForm
 import javax.inject._
 import models.Team
+import play.api.data
 import play.api.mvc._
+import repositories.MongoTeamRepository
 import services.FixtureService
 import views.html.indexPage
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents, fixtureService: FixtureService) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(indexPage(TeamForm.form, fixtureService.teams))
+  def index(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+    fixtureService.getAllTeams.map { teams =>
+      Ok(indexPage(TeamForm.form, teams))
+    }
   }
 
-  def downloadCalendar(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+  def downloadCalendar(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     TeamForm.form.bindFromRequest.fold(
       formWithErrors => {
-        BadRequest(formWithErrors.errors.toString)
+        Future.successful(BadRequest(formWithErrors.errors.toString))
       },
       formData => {
-        val team: Option[Team] = fixtureService.getTeamFromName(formData.teamName)
-
-        team.fold(BadRequest("Team does not exist")) { data =>
-          val calendar = fixtureService.createCalendar(data)
-
-          Ok(calendar).as("text/calendar").withHeaders(
-            "Content-Disposition" -> s"attachment; filename=${data.name} Fixtures.ics"
-          )
-        }
+        for {
+          teamOption <- fixtureService.getTeamFromName(formData.teamName)
+          val team: Team = teamOption.getOrElse(throw new Exception)
+          calendar <- fixtureService.createCalendar(team)
+        } yield {
+            Ok(calendar).as("text/calendar").withHeaders(
+              "Content-Disposition" -> s"attachment; filename=${team.name} Fixtures.ics"
+            )
+          }
       }
     )
   }
