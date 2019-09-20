@@ -9,6 +9,8 @@ import models.{Fixture, Team}
 import repositories.{MongoFixtureRepository, MongoTeamRepository}
 import utils.DateHelper._
 
+import scala.concurrent.Future
+
 class UploadService @Inject()(fixtureFileConnector: FixtureFileConnector,
                               appConfig: ApplicationConfig,
                               mongoTeamRepository: MongoTeamRepository,
@@ -26,7 +28,7 @@ class UploadService @Inject()(fixtureFileConnector: FixtureFileConnector,
     }
   }
 
-  def uploadAllFixturesForTeam(team: Team) = {
+  def uploadAllFixturesForTeam(team: Team): Future[Boolean] = {
     val allFixtures = fixtureFileConnector.getFixtureWeeks().flatMap {
       fixtureWeek =>
         val fixture: Option[(Int, Int)] = fixtureWeek.fixtures.find(fixture => fixture._1 == team.number || fixture._2 == team.number)
@@ -42,10 +44,10 @@ class UploadService @Inject()(fixtureFileConnector: FixtureFileConnector,
         }
     }
     mongoFixtureRepository.flush(team)
-    mongoFixtureRepository.createAll(team,allFixtures.sortBy(_.date))
+    mongoFixtureRepository.createAll(team, allFixtures.sortBy(_.date))
   }
 
-  def uploadAllTeams = {
+  def uploadAllTeams: List[Team] = {
     val allTeams = fixtureFileConnector.getTeams()
     mongoTeamRepository.flush
     mongoTeamRepository.createAll(allTeams)

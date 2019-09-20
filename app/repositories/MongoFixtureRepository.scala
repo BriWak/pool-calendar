@@ -20,45 +20,27 @@ class MongoFixtureRepository @Inject()(
   }
 
   def create(team: Team, value: Fixture): Future[Boolean] = {
-
-    val futureResult = collection(team.name).flatMap(_.insert.one(value))
-
-    futureResult.map(_.ok)
+    collection(team.name).flatMap(_.insert.one(value)).map(_.ok)
   }
 
   def createAll(team: Team, value: List[Fixture]): Future[Boolean] = {
-
-    val futureResult = collection(team.name).flatMap(_.insert.many(value))
-
-    futureResult.map(_.ok)
+    collection(team.name).flatMap(_.insert.many(value)).map(_.ok)
   }
 
-//  def findTeamByName(value: String) = {
-//    val cursor: Future[Cursor[Team]] = collection.map(_.find(Json.obj("name" -> value))
-//      .sort(Json.obj("number" -> -1)).cursor[Team]())
-//
-//    val futureTeamList = cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
-//
-//    futureTeamList.map(_.headOption)
-//  }
-
-  def findAllFixtures(team: Team) = {
+  def findAllFixtures(team: Team): Future[List[Fixture]] = {
     val cursor= collection(team.name).map(_.find(Json.obj()).cursor[Fixture]())
-
-    val futureTeamList = cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Fixture]]()))
-
-    futureTeamList
+    cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Fixture]]()))
   }
 
-  def updateFixture(team: Team, value: Fixture, newValue: Fixture) ={
-    collection(team.name).flatMap(_.update.one(value, newValue))
+  def updateFixture(team: Team, value: Fixture, newValue: Fixture): Future[Boolean] ={
+    collection(team.name).flatMap(_.update.one(value, newValue)).map(_.ok)
   }
 
-  def deleteFixture(team: Team, value: Fixture) = {
-    collection(team.name).flatMap(_.delete.one(value, Some(1)))
+  def deleteFixture(team: Team, value: Fixture): Future[Boolean] = {
+    collection(team.name).flatMap(_.delete.one(value, Some(1))).map(_.ok)
   }
 
-  def flush(team: Team)  = {
+  def flush(team: Team): Future[Boolean] = {
     collection(team.name).flatMap(_.drop(false))
   }
 }

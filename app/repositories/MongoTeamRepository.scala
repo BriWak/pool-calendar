@@ -20,45 +20,31 @@ class MongoTeamRepository @Inject()(
   }
 
   def create(value: Team): Future[Boolean] = {
-
-    val futureResult = collection.flatMap(_.insert.one(value))
-
-    futureResult.map(_.ok)
+    collection.flatMap(_.insert.one(value)).map(_.ok)
   }
 
   def createAll(value: List[Team]): Future[Boolean] = {
-
-    val futureResult = collection.flatMap(_.insert.many(value))
-
-    futureResult.map(_.ok)
+    collection.flatMap(_.insert.many(value)).map(_.ok)
   }
 
-  def findTeamByName(value: String) = {
-    val cursor: Future[Cursor[Team]] = collection.map(_.find(Json.obj("name" -> value))
-      .sort(Json.obj("number" -> -1)).cursor[Team]())
-
-    val futureTeamList = cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
-
-    futureTeamList.map(_.headOption)
+  def findTeamByName(value: String): Future[Option[Team]] = {
+    collection.flatMap(_.find(Json.obj("name" -> value)).one[Team])
   }
 
-  def findAllTeams() = {
-    val cursor= collection.map(_.find(Json.obj()).cursor[Team]())
-
-    val futureTeamList = cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
-
-    futureTeamList
+  def findAllTeams(): Future[List[Team]] = {
+    val cursor = collection.map(_.find(Json.obj()).cursor[Team]())
+    cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
   }
 
-  def updateTeam(value: Team, newValue: Team) ={
-    collection.flatMap(_.update.one(value, newValue))
+  def updateTeam(value: Team, newValue: Team): Future[Boolean] ={
+    collection.flatMap(_.update.one(value, newValue)).map(_.ok)
   }
 
-  def deleteTeam(value: Team) = {
-    collection.flatMap(_.delete.one(value, Some(1)))
+  def deleteTeam(value: Team): Future[Boolean] = {
+    collection.flatMap(_.delete.one(value, Some(1))).map(_.ok)
   }
 
-  def flush = {
+  def flush: Future[Boolean] = {
     collection.flatMap(_.drop(false))
   }
 }
