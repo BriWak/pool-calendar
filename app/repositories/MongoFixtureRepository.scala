@@ -1,10 +1,9 @@
 package repositories
 
 import com.google.inject.Inject
-import models.{Fixture, FixtureList, Team}
+import models.{FixtureList, Team}
 import play.api.libs.json.Json
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
-import reactivemongo.api.Cursor
 import reactivemongo.play.json._
 import reactivemongo.play.json.collection._
 
@@ -26,7 +25,6 @@ class MongoFixtureRepository @Inject()(
   def createAll(value: List[FixtureList]): Future[Boolean] = {
     collection.flatMap(_.insert.many(value)).map(_.ok)
   }
-
 
   def findAllFixtures(team: Team): Future[Option[FixtureList]] = {
     collection.flatMap(_.find(Json.obj("team.name" -> team.name)).one[FixtureList])

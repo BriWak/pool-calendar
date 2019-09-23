@@ -14,7 +14,7 @@ import utils.DateHelper._
 class FileService @Inject()(fixtureFileConnector: FileConnector,
                             appConfig: ApplicationConfig) {
 
-  def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]): Either[String, String] = {
+  def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]) = {
     val filename = file.filename
     if (filename.takeRight(4) == ".csv") {
       file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
