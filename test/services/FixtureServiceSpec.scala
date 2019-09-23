@@ -1,7 +1,7 @@
 package services
 
 import conf.ApplicationConfig
-import connectors.FixtureFileConnector
+import connectors.FileConnector
 import models.{Fixture, FixtureList, FixtureWeek, Team}
 import org.scalatest.MustMatchers
 import org.scalatest.concurrent.ScalaFutures
@@ -13,7 +13,7 @@ import utils.DateHelper.convertStringToDate
 
 class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures with MockitoSugar with GuiceOneAppPerSuite with Injecting {
 
-  private val mockFixtureFileConnector = mock[FixtureFileConnector]
+  private val mockFixtureFileConnector = mock[FileConnector]
   private val appConfig = inject[ApplicationConfig]
 
   private val fixtureService = new FixtureService(mockFixtureFileConnector, appConfig) {

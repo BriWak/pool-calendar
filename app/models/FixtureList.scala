@@ -1,13 +1,15 @@
 package models
 
-case class FixtureList(fixtures: List[Fixture]) {
+import play.api.libs.json.{Json, OFormat}
+
+case class FixtureList(team: Team, fixtures: List[Fixture]) {
 
   def sort(): FixtureList = {
-    FixtureList(fixtures.sortBy(_.date))
+    FixtureList(team, fixtures.sortBy(_.date))
   }
 }
 
 object FixtureList {
-  def apply(fixtures: Fixture*)(implicit d: DummyImplicit) = new FixtureList(List(fixtures: _*))
+  implicit val fmts: OFormat[FixtureList]= Json.format[FixtureList]
 
 }

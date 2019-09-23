@@ -5,10 +5,11 @@ import java.io.File
 import conf.ApplicationConfig
 import controllers.auth.AuthAction
 import javax.inject._
+import models.{FixtureList, Team}
 import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
-import services.{FixtureService, UploadService}
+import services.{FileService, FixtureService, MongoService}
 import views.html.upload
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -19,7 +20,8 @@ class UploadController @Inject()(cc: ControllerComponents,
                                  environment: Environment,
                                  appConfig: ApplicationConfig,
                                  authAction: AuthAction,
-                                 uploadService: UploadService)
+                                 fileService: FileService,
+                                 mongoService: MongoService)
                                 (implicit ec: ExecutionContext
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
@@ -32,12 +34,15 @@ class UploadController @Inject()(cc: ControllerComponents,
       val filename = file.filename
       if (filename.takeRight(4) == ".csv") {
         file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
-        Future.sequence(uploadService.uploadAllTeams.map(uploadService.uploadAllFixturesForTeam))
+        val allTeams: List[Team] = fileService.getTeams()
+        val allFixtures: List[FixtureList] = allTeams.map(fileService.getFixturesForTeam)
+        mongoService.uploadAllTeams(allTeams)
+        mongoService.uploadAllFixturesForAllTeams(allFixtures)
           .map { y =>
-            if (y.contains(false)) {
-              Ok(upload("There has been a problem saving the fixture information to the database.", true))
-            } else
+            if (y) {
               Ok(upload("The file has been successfully uploaded.", true))
+            } else
+            Ok(upload("There has been a problem saving the fixture information to the database.", true))
           }
       } else {
         Future.successful(Ok(upload("The file type is incorrect, only CSV files are supported.", true)))

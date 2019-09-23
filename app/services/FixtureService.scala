@@ -4,7 +4,7 @@ import java.util.{Calendar, Date}
 
 import com.google.inject.Inject
 import conf.ApplicationConfig
-import connectors.FixtureFileConnector
+import connectors.FileConnector
 import models.{Fixture, FixtureList, FixtureWeek, Team}
 import repositories.{MongoFixtureRepository, MongoTeamRepository}
 import utils.DateHelper._
@@ -12,13 +12,14 @@ import utils.DateHelper._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FixtureService @Inject()(fixtureFileConnector: FixtureFileConnector,
+class FixtureService @Inject()(fixtureFileConnector: FileConnector,
                                appConfig: ApplicationConfig,
                                mongoTeamRepository: MongoTeamRepository,
                                mongoFixtureRepository: MongoFixtureRepository) {
 
   def getAllFixturesForTeam(team: Team): Future[List[Fixture]] = {
-    mongoFixtureRepository.findAllFixtures(team)
+    mongoFixtureRepository.findAllFixtures(team).map(fixtureList =>
+    fixtureList.get.fixtures)
   }
 
   def getAllTeams ={

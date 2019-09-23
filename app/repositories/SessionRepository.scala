@@ -22,8 +22,8 @@ class SessionRepository @Inject()(val reactiveMongoApi: ReactiveMongoApi,
   }
 
   def create(session: UserSession): Future[Boolean] = {
-    collection.flatMap(_.indexesManager.ensure(Index(Seq("expiresAt" -> IndexType.Ascending),
-      name = Some("expiresAt"),
+    collection.flatMap(_.indexesManager.ensure(Index(Seq("createdAt" -> IndexType.Ascending),
+      name = Some("createdAt"),
       options = BSONDocument("expireAfterSeconds" -> config.expireAfterSeconds))))
     collection.flatMap(_.insert.one(session)).map(_.ok)
   }
