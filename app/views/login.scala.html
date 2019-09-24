@@ -9,10 +9,26 @@
 @form(action = controllers.routes.LoginController.onSubmit, Symbol("id") -> "login") {
 <h1 id="loginTitle">Enter your login details</h1>
 @CSRF.formField
-@inputText(loginForm("username"), Symbol("placeholder") -> "Username", Symbol("autocomplete") -> "username", Symbol("_showConstraints") -> false, Symbol("id") -> "loginInput", Symbol("_label") -> "", Symbol("required") -> "")
+@inputText(
+    loginForm("username"),
+    Symbol("placeholder") -> "Username",
+    Symbol("autocomplete") -> "username",
+    Symbol("_showConstraints") -> false,
+    Symbol("id") -> "loginInput",
+    Symbol("_label") -> "",
+    Symbol("required") -> ""
+)
 
-@inputPassword(loginForm("password"), Symbol("placeholder") -> "Password", Symbol("autocomplete") -> "password", Symbol("_showConstraints") -> false, Symbol("id") -> "loginInput", Symbol("_label") -> "", Symbol("required") -> "")
+@inputPassword(
+    loginForm("password"),
+    Symbol("placeholder") -> "Password",
+    Symbol("autocomplete") -> "password",
+    Symbol("_showConstraints") -> false,
+    Symbol("id") -> "loginInput",
+    Symbol("_label") -> "",
+    Symbol("required") -> ""
+)
 
-<input type="submit" value="submit" id="loginButton">
+<input type="submit" value="submit" class="button">
 }
 }
