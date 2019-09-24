@@ -7,7 +7,7 @@
     height: 100px;
     margin: 0px;
     width: 100%;
-    font-size: 18px;
+    font-size: 20px;
     background: green;
     color: white;
     line-height: 150%;
@@ -16,6 +16,7 @@
 }
 
 #login {
+    font-size: 16px;
     background: #f2f2f2;
     box-sizing: border-box;
     display: inline-block;
@@ -28,7 +29,7 @@
 
 #login #loginTitle {
     box-sizing: border-box;
-    padding: 40px;
+    padding: 35px;
 }
 
 #loginInput {
@@ -60,15 +61,20 @@
 }
 
 #loginButton {
-    font-weight: bold;
-    margin: 40px 0px 0px 0px;
+    display: inline-block;
     border: none;
-    background: #4CAF50;
-    cursor: pointer;
-    border-radius: 3px;
+    border-radius: 0.3rem;
     padding: 6px;
     width: 200px;
     color: white;
+    margin: 40px 0px 0px 0px;
+    text-decoration: none;
+    background: #4CAF50;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out,
+                transform 150ms ease;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
     -webkit-appearance: none;
     -moz-appearance: none;
