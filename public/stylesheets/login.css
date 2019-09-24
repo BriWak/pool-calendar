@@ -83,10 +83,24 @@
 
 #loginButton:hover,
 #loginButton:focus {
-    transform: translateY(-3px);
-/*    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2); */
+    background: #434343;
 }
 
+#loginButton:focus {
+    outline: 1px solid #fff;
+    outline-offset: -4px;
+}
+
+#loginButton:active {
+    transform: scale(0.99);
+}
+
+/*#loginButton:hover,
+#loginButton:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+}
+*/
 @media screen and (max-width: 600px) {
     #login {
         box-sizing: border-box;
