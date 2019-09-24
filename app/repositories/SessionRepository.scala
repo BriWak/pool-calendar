@@ -36,14 +36,6 @@ class SessionRepository @Inject()(val reactiveMongoApi: ReactiveMongoApi,
     collection.flatMap(_.find(Json.obj("uuid" -> value)).one[UserSession])
   }
 
-//  def updateSession(value: String, newValue: String): Future[Boolean] ={
-//    collection.flatMap(_.update.one(value, newValue)).map(_.ok)
-//  }
-//
-//  def deleteSession(value: String): Future[Boolean] = {
-//    collection.flatMap(_.delete.one(value, Some(1))).map(_.ok)
-//  }
-
   def flush: Future[Boolean] = {
     collection.flatMap(_.drop(false))
   }

@@ -23,7 +23,7 @@ class AuthService @Inject()(sessionRepository: SessionRepository,
     sessionRepository.findByUuid(uuid).map(_.isDefined)
   }
 
-  private def addAuthUUID(username: String) = {
+  private def addAuthUUID(username: String): Future[UserSession] = {
     val userSession = UserSession(username, UUID.randomUUID().toString)
     sessionRepository.create(userSession).map { _ =>
       userSession

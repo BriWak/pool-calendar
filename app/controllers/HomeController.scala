@@ -3,9 +3,7 @@ package controllers
 import forms.TeamForm
 import javax.inject._
 import models.Team
-import play.api.data
 import play.api.mvc._
-import repositories.MongoTeamRepository
 import services.FixtureService
 import views.html.indexPage
 

@@ -14,10 +14,10 @@ import utils.DateHelper._
 class FileService @Inject()(fixtureFileConnector: FileConnector,
                             appConfig: ApplicationConfig) {
 
-  def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]) = {
+  def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]): Either[String, String] = {
     val filename = file.filename
     if (filename.takeRight(4) == ".csv") {
-      file.ref.moveFileTo(new File(appConfig.fixturesFilePath + filename), replace = true)
+      file.ref.moveFileTo(new File(s"${appConfig.fixturesFilePath}Pool fixtures.csv"), replace = true)
       Right("The file has been successfully uploaded.")
     } else {
       Left("The file type is incorrect, only CSV files are supported.")

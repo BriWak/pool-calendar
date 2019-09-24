@@ -1,19 +1,17 @@
 package services
 
-import java.util.{Calendar, Date}
+import java.util.Calendar
 
 import com.google.inject.Inject
 import conf.ApplicationConfig
-import connectors.FileConnector
-import models.{Fixture, FixtureList, FixtureWeek, Team}
+import models.{Fixture, Team}
 import repositories.{MongoFixtureRepository, MongoTeamRepository}
 import utils.DateHelper._
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class FixtureService @Inject()(fixtureFileConnector: FileConnector,
-                               appConfig: ApplicationConfig,
+class FixtureService @Inject()(appConfig: ApplicationConfig,
                                mongoTeamRepository: MongoTeamRepository,
                                mongoFixtureRepository: MongoFixtureRepository) {
 
@@ -22,7 +20,7 @@ class FixtureService @Inject()(fixtureFileConnector: FileConnector,
     fixtureList.get.fixtures)
   }
 
-  def getAllTeams ={
+  def getAllTeams: Future[List[Team]] ={
     mongoTeamRepository.findAllTeams()
   }
 

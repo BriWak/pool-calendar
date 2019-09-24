@@ -15,7 +15,6 @@ class MongoService @Inject()(mongoFixtureRepository: MongoFixtureRepository,
   }
 
   def uploadAllTeams(teams: List[Team]): Future[List[Team]] = {
-
     for {
       _ <- mongoTeamRepository.flush
       _ <- mongoTeamRepository.createAll(teams)
