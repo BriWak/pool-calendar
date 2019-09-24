@@ -2,22 +2,23 @@ package services
 
 import com.google.inject.Inject
 import models.{FixtureList, Team}
-import repositories.{MongoFixtureRepository, MongoTeamRepository}
+import repositories.{FixtureRepository, TeamRepository}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class MongoService @Inject()(mongoFixtureRepository: MongoFixtureRepository,
-                             mongoTeamRepository: MongoTeamRepository) {
+class MongoService @Inject()(fixtureRepository: FixtureRepository,
+                             teamRepository: TeamRepository) {
 
   def uploadAllFixturesForAllTeams(fixtureList: List[FixtureList]): Future[Boolean] = {
-    mongoFixtureRepository.flush
-    mongoFixtureRepository.createAll(fixtureList)
+    fixtureRepository.flush.flatMap { _ =>
+      fixtureRepository.createAll(fixtureList)
+    }
   }
 
   def uploadAllTeams(teams: List[Team]): Future[List[Team]] = {
     for {
-      _ <- mongoTeamRepository.flush
-      _ <- mongoTeamRepository.createAll(teams)
+      _ <- teamRepository.flush
+      _ <- teamRepository.createAll(teams)
     } yield teams
   }
 }

@@ -11,7 +11,7 @@ import reactivemongo.play.json.collection._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class MongoTeamRepository @Inject()(
+class TeamRepository @Inject()(
                       val reactiveMongoApi: ReactiveMongoApi
                      ) extends ReactiveMongoComponents {
 
@@ -28,11 +28,11 @@ class MongoTeamRepository @Inject()(
   }
 
   def findTeamByName(value: String): Future[Option[Team]] = {
-    collection.flatMap(_.find(Json.obj("name" -> value), None).one[Team])
+    collection.flatMap(_.find(Json.obj("name" -> value), Some(Json.obj())).one[Team])
   }
 
   def findAllTeams(): Future[List[Team]] = {
-    val cursor = collection.map(_.find(Json.obj(), None).cursor[Team]())
+    val cursor = collection.map(_.find(Json.obj(), Some(Json.obj())).cursor[Team]())
     cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
   }
 

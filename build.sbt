@@ -34,14 +34,14 @@ lazy val root = (project in file("."))
       "org.mockito"             % "mockito-core"        % "3.0.0" % Test
     ),
     dependencyOverrides ++= Seq(
-      "com.typesafe.akka" %% "akka-actor" % "2.5.25",
-      "com.typesafe.akka" %% "akka-slf4j" % "2.5.25"
+      "com.typesafe.akka"           %% "akka-actor"           % "2.5.25",
+      "com.typesafe.akka"           %% "akka-slf4j"           % "2.5.25",
+      "com.typesafe.akka"           %% "akka-stream"          % "2.5.25",
+      "com.typesafe.akka"           %% "akka-protobuf"        % "2.5.25",
+      "com.typesafe"                %% "ssl-config-core"      % "0.4.0",
+      "com.google.guava"             % "guava"                % "27.1-jre",
+      "com.fasterxml.jackson.core"   % "jackson-databind"     % "2.9.8",
+      "com.fasterxml.jackson.core"   % "jackson-annotations"  % "2.9.8",
+      "org.slf4j"                    % "slf4j-api"            % "1.7.26"
     )
   )
-
-
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "com.example.controllers._"
-
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "com.example.binders._"

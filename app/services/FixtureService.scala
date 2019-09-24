@@ -5,27 +5,27 @@ import java.util.Calendar
 import com.google.inject.Inject
 import conf.ApplicationConfig
 import models.{Fixture, Team}
-import repositories.{MongoFixtureRepository, MongoTeamRepository}
+import repositories.{FixtureRepository, TeamRepository}
 import utils.DateHelper._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class FixtureService @Inject()(appConfig: ApplicationConfig,
-                               mongoTeamRepository: MongoTeamRepository,
-                               mongoFixtureRepository: MongoFixtureRepository) {
+                               teamRepository: TeamRepository,
+                               fixtureRepository: FixtureRepository) {
 
   def getAllFixturesForTeam(team: Team): Future[List[Fixture]] = {
-    mongoFixtureRepository.findAllFixtures(team).map(fixtureList =>
-    fixtureList.get.fixtures)
+    fixtureRepository.findAllFixtures(team).map(fixtureList =>
+      fixtureList.get.fixtures)
   }
 
-  def getAllTeams: Future[List[Team]] ={
-    mongoTeamRepository.findAllTeams()
+  def getAllTeams: Future[List[Team]] = {
+    teamRepository.findAllTeams()
   }
 
   def getTeamFromName(name: String): Future[Option[Team]] = {
-    mongoTeamRepository.findTeamByName(name)
+    teamRepository.findTeamByName(name)
   }
 
   def createCalendar(team: Team): Future[String] = {

@@ -10,7 +10,7 @@ import reactivemongo.play.json.collection._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class MongoFixtureRepository @Inject()(
+class FixtureRepository @Inject()(
                       val reactiveMongoApi: ReactiveMongoApi
                      ) extends ReactiveMongoComponents {
 
@@ -27,7 +27,7 @@ class MongoFixtureRepository @Inject()(
   }
 
   def findAllFixtures(team: Team): Future[Option[FixtureList]] = {
-    collection.flatMap(_.find(Json.obj("team.name" -> team.name), None).one[FixtureList])
+    collection.flatMap(_.find(Json.obj("team.name" -> team.name), Some(Json.obj())).one[FixtureList])
   }
 
   def flush: Future[Boolean] = {

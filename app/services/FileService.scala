@@ -11,7 +11,7 @@ import play.api.libs.Files
 import play.api.mvc.MultipartFormData
 import utils.DateHelper._
 
-class FileService @Inject()(fixtureFileConnector: FileConnector,
+class FileService @Inject()(fileConnector: FileConnector,
                             appConfig: ApplicationConfig) {
 
   def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]): Either[String, String] = {
@@ -24,15 +24,17 @@ class FileService @Inject()(fixtureFileConnector: FileConnector,
     }
   }
 
-  def getTeams(processedCsv: List[String] = fixtureFileConnector.processCsvFile): List[Team] = {
+  def getTeams(processedCsv: List[String] = fileConnector.processCsvFile): List[Team] = {
     val teamPattern = """(\d+)\ ([a-zA-z -]+)""".r
-    teamPattern.findAllMatchIn(processedCsv.mkString("\n")).map(m => Team(m.group(2).trim,m.group(1).toInt)).toList.sortBy(_.number)
+    teamPattern.findAllMatchIn(processedCsv.mkString("\n"))
+      .map(m => Team(m.group(2).trim, m.group(1).toInt)).toList.sortBy(_.number)
   }
 
   def getFixturesForTeam(team: Team): FixtureList = {
     val allFixtures = getFixtureWeeks().flatMap {
       fixtureWeek =>
-        val fixture: Option[(Int, Int)] = fixtureWeek.fixtures.find(fixture => fixture._1 == team.number || fixture._2 == team.number)
+        val fixture: Option[(Int, Int)] = fixtureWeek.fixtures
+          .find(fixture => fixture._1 == team.number || fixture._2 == team.number)
 
         fixture match {
           case Some((home, away)) =>
@@ -47,22 +49,26 @@ class FileService @Inject()(fixtureFileConnector: FileConnector,
     FixtureList(team, allFixtures.sortBy(_.date))
   }
 
-  private def getFixtureWeeks(processedCsv: List[String] = fixtureFileConnector.processCsvFile): List[FixtureWeek] = {
+  private def getFixtureWeeks(processedCsv: List[String] = fileConnector.processCsvFile): List[FixtureWeek] = {
 
     case class TempFixtureWeek(fixtures: List[(Int, Int)], date1: Option[String], date2: Option[String])
 
     val numOnlyPattern = """^\d+$""".r
     val fixturePattern = """^(\d+)-(\d+)$""".r
 
-    val rows: List[List[String]] = processedCsv.map { _.split(",").map(_.trim).toList}
+    val rows: List[List[String]] = processedCsv.map {
+      _.split(",").map(_.trim).toList
+    }
 
-    val fixtureRows: List[List[String]] = rows.collect{case a if numOnlyPattern.matches(a.headOption.getOrElse("")) => a }
+    val fixtureRows: List[List[String]] = rows.collect {
+      case row if numOnlyPattern.matches(row.headOption.getOrElse("")) => row
+    }
 
     fixtureRows.map {
       row =>
         row.tail.foldLeft[TempFixtureWeek](TempFixtureWeek(Nil, None, None)) { (acc, current) =>
           if (fixturePattern.matches(current)) {
-            val (home, away) = fixturePattern.findFirstMatchIn(current).map{ matches =>
+            val (home, away) = fixturePattern.findFirstMatchIn(current).map { matches =>
               (matches.group(1), matches.group(2))
             }.getOrElse(throw new Exception("Error retrieving fixtures"))
             acc.copy(acc.fixtures.appended((home.toInt, away.toInt)))
@@ -73,7 +79,7 @@ class FileService @Inject()(fixtureFileConnector: FileConnector,
             acc.copy(date2 = Some(current))
           }
         }
-    }.map{
+    }.map {
       fixtureTemp =>
         FixtureWeek(fixtureTemp.fixtures, fixtureTemp.date1.get, fixtureTemp.date2.get)
     }

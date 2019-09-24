@@ -11,7 +11,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents, fixtureService: FixtureService) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+class HomeController @Inject()(cc: ControllerComponents,
+                               fixtureService: FixtureService
+                              ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def index(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     fixtureService.getAllTeams.map { teams =>

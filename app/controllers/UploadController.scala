@@ -27,23 +27,26 @@ class UploadController @Inject()(cc: ControllerComponents,
     Ok(upload("File Upload"))
   }
 
-  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = authAction(parse.multipartFormData).async { implicit request =>
-    request.body.file("fileUpload").map(fileService.saveFile).fold(Future.successful(Redirect(routes.UploadController.uploadPage()))) { csv =>
-      csv.fold(errorMessage => Future.successful(Ok(upload(errorMessage, true))),
-        successMessage => {
-          val allTeams: List[Team] = fileService.getTeams()
-          val allFixtures: List[FixtureList] = allTeams.map(fileService.getFixturesForTeam)
-          val teams = mongoService.uploadAllTeams(allTeams)
-          val fixtures = mongoService.uploadAllFixturesForAllTeams(allFixtures)
-          for {_ <- teams
-               _ <- fixtures
-               } yield {
-            Ok(upload(successMessage, true))
-          }
-        }
-      )
-    }.recoverWith {
-      case _ => Future.successful(Ok(upload("There has been a problem saving the fixture information to the database.", true)))
-    }
+  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = authAction(parse.multipartFormData).async {
+    implicit request =>
+      request.body.file("fileUpload").map(fileService.saveFile)
+        .fold(Future.successful(Redirect(routes.UploadController.uploadPage()))) { csv =>
+          csv.fold(errorMessage => Future.successful(Ok(upload(errorMessage, true))),
+            successMessage => {
+              val allTeams: List[Team] = fileService.getTeams()
+              val allFixtures: List[FixtureList] = allTeams.map(fileService.getFixturesForTeam)
+              val teams = mongoService.uploadAllTeams(allTeams)
+              val fixtures = mongoService.uploadAllFixturesForAllTeams(allFixtures)
+              for {_ <- teams
+                   _ <- fixtures
+                   } yield {
+                Ok(upload(successMessage, true))
+              }
+            }
+          )
+        }.recoverWith {
+        case _ =>
+          Future.successful(Ok(upload("There has been a problem saving the fixture information to the database.", true)))
+      }
   }
 }
