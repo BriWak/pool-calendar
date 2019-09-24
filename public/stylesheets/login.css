@@ -83,12 +83,8 @@
 
 #loginButton:hover,
 #loginButton:focus {
-    background: #434343;
-}
-
-#loginButton:focus {
-    outline: 1px solid #fff;
-    outline-offset: -4px;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 #loginButton:active {
