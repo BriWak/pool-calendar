@@ -1,4 +1,4 @@
-#loginTitle, #loginInput::-webkit-input-placeholder, #loginButton {
+#loginTitle, #loginInput::-webkit-input-placeholder {
     font-family: 'roboto', sans-serif;
     transition: all 0.3s ease-in-out;
 }
@@ -90,4 +90,10 @@
         box-sizing: border-box;
         width: 98%;
     }
+}
+
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
