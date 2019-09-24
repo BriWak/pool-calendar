@@ -71,7 +71,7 @@
     background: #4CAF50;
     color: #ffffff;
     font-family: sans-serif;
-    font-size: 1rem;
+    font-size: 16px;
     cursor: pointer;
     text-align: center;
     transition: background 250ms ease-in-out,
@@ -91,15 +91,14 @@
     transform: scale(0.99);
 }
 
-/*#loginButton:hover,
-#loginButton:focus {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
-}
-*/
 @media screen and (max-width: 600px) {
     #login {
         box-sizing: border-box;
         width: 98%;
+    }
+
+    #loginInput:focus::-webkit-input-placeholder, #loginInput:valid::-webkit-input-placeholder {
+        font-size: 16px;
+        transform: translateY(-30px);
     }
 }
