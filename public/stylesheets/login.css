@@ -66,23 +66,25 @@
     border-radius: 0.3rem;
     padding: 6px;
     width: 200px;
-    color: white;
     margin: 40px 0px 0px 0px;
     text-decoration: none;
     background: #4CAF50;
+    color: #ffffff;
+    font-family: sans-serif;
     font-size: 1rem;
     cursor: pointer;
     text-align: center;
     transition: background 250ms ease-in-out,
                 transform 150ms ease;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+/*    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2); */
     -webkit-appearance: none;
     -moz-appearance: none;
 }
 
-#loginButton:hover {
+#loginButton:hover,
+#loginButton:focus {
     transform: translateY(-3px);
-    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+/*    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2); */
 }
 
 @media screen and (max-width: 600px) {
@@ -90,10 +92,4 @@
         box-sizing: border-box;
         width: 98%;
     }
-}
-
-input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 }
