@@ -28,11 +28,11 @@ class MongoTeamRepository @Inject()(
   }
 
   def findTeamByName(value: String): Future[Option[Team]] = {
-    collection.flatMap(_.find(Json.obj("name" -> value)).one[Team])
+    collection.flatMap(_.find(Json.obj("name" -> value), None).one[Team])
   }
 
   def findAllTeams(): Future[List[Team]] = {
-    val cursor = collection.map(_.find(Json.obj()).cursor[Team]())
+    val cursor = collection.map(_.find(Json.obj(), None).cursor[Team]())
     cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
   }
 

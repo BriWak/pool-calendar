@@ -29,11 +29,11 @@ class SessionRepository @Inject()(val reactiveMongoApi: ReactiveMongoApi,
   }
 
   def findByUsername(value: String): Future[Option[UserSession]] = {
-    collection.flatMap(_.find(Json.obj("username" -> value)).one[UserSession])
+    collection.flatMap(_.find(Json.obj("username" -> value), None).one[UserSession])
   }
 
   def findByUuid(value: String): Future[Option[UserSession]] = {
-    collection.flatMap(_.find(Json.obj("uuid" -> value)).one[UserSession])
+    collection.flatMap(_.find(Json.obj("uuid" -> value), None).one[UserSession])
   }
 
   def flush: Future[Boolean] = {

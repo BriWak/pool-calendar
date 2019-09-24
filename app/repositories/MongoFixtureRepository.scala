@@ -27,7 +27,7 @@ class MongoFixtureRepository @Inject()(
   }
 
   def findAllFixtures(team: Team): Future[Option[FixtureList]] = {
-    collection.flatMap(_.find(Json.obj("team.name" -> team.name)).one[FixtureList])
+    collection.flatMap(_.find(Json.obj("team.name" -> team.name), None).one[FixtureList])
   }
 
   def flush: Future[Boolean] = {
