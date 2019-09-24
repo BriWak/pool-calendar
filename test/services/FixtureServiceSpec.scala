@@ -1,7 +1,7 @@
 package services
 
 import conf.ApplicationConfig
-import connectors.FixtureFileConnector
+import connectors.FileConnector
 import models.{Fixture, FixtureList, FixtureWeek, Team}
 import org.scalatest.MustMatchers
 import org.scalatest.concurrent.ScalaFutures
@@ -13,7 +13,7 @@ import utils.DateHelper.convertStringToDate
 
 class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures with MockitoSugar with GuiceOneAppPerSuite with Injecting {
 
-  private val mockFixtureFileConnector = mock[FixtureFileConnector]
+  private val mockFixtureFileConnector = mock[FileConnector]
   private val appConfig = inject[ApplicationConfig]
 
   private val fixtureService = new FixtureService(mockFixtureFileConnector, appConfig) {
@@ -60,7 +60,7 @@ class FixtureServiceSpec extends PlaySpec with MustMatchers with ScalaFutures wi
   "createAllFixturesForTeam" should {
 
     "generate a sorted FixtureList with all available fixtures for a team" in {
-      val result = fixtureService.createAllFixturesForTeam(Team("Annitsford Irish B", 14))
+      val result = fixtureService.getAllFixturesForTeam(Team("Annitsford Irish B", 14))
 
       val expectedResult = FixtureList(
         Fixture(convertStringToDate("05/09/19"), Team("Comrades A", 3), Team("Annitsford Irish B", 14)),

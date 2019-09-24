@@ -1,7 +1,7 @@
 package services
 
 import conf.ApplicationConfig
-import connectors.FixtureFileConnector
+import connectors.FileConnector
 import models.{FixtureWeek, Team}
 import org.scalatest.MustMatchers
 import org.scalatest.concurrent.ScalaFutures
@@ -13,7 +13,7 @@ class FixtureFileConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with Mu
 
   val mockAppConfig = mock[ApplicationConfig]
 
-  private val fixtureFileConnector = new FixtureFileConnector(app.environment, mockAppConfig)
+  private val fixtureFileConnector = new FileConnector(app.environment, mockAppConfig)
 
   val processedCsv = List(
     "Super League,,,,,,,,,,",

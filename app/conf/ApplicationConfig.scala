@@ -1,7 +1,5 @@
 package conf
 
-import java.util.UUID
-
 import javax.inject._
 import play.api.{Configuration, Environment}
 
@@ -22,6 +20,5 @@ class ApplicationConfig @Inject()(
   lazy val fixturesFilePath: String = loadConfig("fixtures.file.path")
   lazy val fixtureStartTime: String = loadConfig("fixture.start.time")
   lazy val fixtureEndTime: String = loadConfig("fixture.end.time")
-
-  lazy val uuid: String = UUID.randomUUID().toString
+  lazy val expireAfterSeconds: Int = loadConfig("mongodb.expireAfterSeconds").toInt
 }
