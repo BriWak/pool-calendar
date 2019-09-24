@@ -1,0 +1,84 @@
+#loginTitle, #loginInput::-webkit-input-placeholder, #loginButton {
+    font-family: 'roboto', sans-serif;
+    transition: all 0.3s ease-in-out;
+}
+
+#loginTitle {
+    height: 100px;
+    margin: 0px;
+    width: 100%;
+    font-size: 18px;
+    background: green;
+    color: white;
+    line-height: 150%;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+#login {
+    background: #f2f2f2;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 360px;
+    margin: 5px 5px;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+    padding-bottom: 40px;
+    border-radius: 3px;
+}
+
+#login #loginTitle {
+    box-sizing: border-box;
+    padding: 40px;
+}
+
+#loginInput {
+    width: 200px;
+    display: inline-block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #4CAF50;
+    transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #4CAF50 4%);
+    background-position: -200px 0;
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    color: #4CAF50;
+}
+
+#loginInput:focus, #loginInput:valid {
+    box-shadow: none;
+    outline: none;
+    background-position: 0 0;
+}
+
+#loginInput:focus::-webkit-input-placeholder, #loginInput:valid::-webkit-input-placeholder {
+    color: #4CAF50;
+    font-size: 11px;
+    transform: translateY(-14px);
+    visibility: visible !important;
+}
+
+#loginButton {
+    font-weight: bold;
+    margin: 40px 0px 0px 0px;
+    border: none;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 6px;
+    width: 200px;
+    color: white;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+#loginButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 600px) {
+    #login {
+        box-sizing: border-box;
+        width: 98%;
+    }
+}

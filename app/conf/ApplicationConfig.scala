@@ -13,8 +13,8 @@ class ApplicationConfig @Inject()(
     configuration.get[String](key)
   }
 
-  lazy val fixturesFilePath: String = loadConfig("fixtures.file.path")
-  lazy val fixtureStartTime: String = loadConfig("fixture.start.time")
-  lazy val fixtureEndTime: String = loadConfig("fixture.end.time")
-  lazy val expireAfterSeconds: Int = loadConfig("mongodb.expireAfterSeconds").toInt
+  val fixturesFilePath: String = loadConfig("fixtures.file.path")
+  val fixtureStartTime: String = loadConfig("fixture.start.time")
+  val fixtureEndTime: String = loadConfig("fixture.end.time")
+  val expireAfterSeconds: Int = loadConfig("mongodb.expireAfterSeconds").toInt
 }
