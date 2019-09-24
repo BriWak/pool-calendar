@@ -76,7 +76,7 @@
     text-align: center;
     transition: background 250ms ease-in-out,
                 transform 150ms ease;
-/*    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2); */
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
     -webkit-appearance: none;
     -moz-appearance: none;
 }
