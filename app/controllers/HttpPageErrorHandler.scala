@@ -1,14 +1,15 @@
 package controllers
 
+import com.google.inject.Inject
 import play.api.http.HttpErrorHandler
 import play.api.http.Status.NOT_FOUND
 import play.api.mvc.Results._
 import play.api.mvc.{RequestHeader, Result}
-import views.html.errorPage
+import views.html.ErrorPage
 
 import scala.concurrent.Future
 
-class HttpPageErrorHandler extends HttpErrorHandler {
+class HttpPageErrorHandler @Inject()(errorPage: ErrorPage) extends HttpErrorHandler {
 
   def onClientError(request: RequestHeader, statusCode: Int, message: String) : Future[Result]= {
     statusCode match {

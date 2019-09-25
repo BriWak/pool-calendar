@@ -5,6 +5,7 @@
  * object to insert into the body of the page.
  *@
 
+@this()
 @(title: String)(content: Html)
 
 <!DOCTYPE html>
@@ -26,7 +27,7 @@
             <li class="title">BDPL Fixtures</li>
             <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index().url}">Home</a></li>
             <li><a class="@("active".when(title == "View Fixtures"))" href="#view">View Fixtures</a></li>
-            <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.uploadPage().url}">Admin</a></li>
+            <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.onPageLoad().url}">Admin</a></li>
         </ul>
 
         <div class="content">

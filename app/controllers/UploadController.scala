@@ -8,7 +8,7 @@ import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
 import services.{FileService, FixtureService, MongoService}
-import views.html.upload
+import views.html.UploadPage
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -19,19 +19,20 @@ class UploadController @Inject()(cc: ControllerComponents,
                                  appConfig: ApplicationConfig,
                                  authAction: AuthAction,
                                  fileService: FileService,
-                                 mongoService: MongoService)
+                                 mongoService: MongoService,
+                                 uploadPage: UploadPage)
                                 (implicit ec: ExecutionContext
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def uploadPage: Action[AnyContent] = authAction { implicit request: Request[AnyContent] =>
-    Ok(upload("File Upload"))
+  def onPageLoad: Action[AnyContent] = authAction { implicit request: Request[AnyContent] =>
+    Ok(uploadPage("File Upload"))
   }
 
   def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = authAction(parse.multipartFormData).async {
     implicit request =>
       request.body.file("fileUpload").map(fileService.saveFile)
-        .fold(Future.successful(Redirect(routes.UploadController.uploadPage()))) { csv =>
-          csv.fold(errorMessage => Future.successful(Ok(upload(errorMessage, true))),
+        .fold(Future.successful(Redirect(routes.UploadController.onPageLoad()))) { csv =>
+          csv.fold(errorMessage => Future.successful(Ok(uploadPage(errorMessage, true))),
             successMessage => {
               val allTeams: List[Team] = fileService.getTeams()
               val allFixtures: List[FixtureList] = allTeams.map(fileService.getFixturesForTeam)
@@ -40,13 +41,13 @@ class UploadController @Inject()(cc: ControllerComponents,
               for {_ <- teams
                    _ <- fixtures
                    } yield {
-                Ok(upload(successMessage, true))
+                Ok(uploadPage(successMessage, true))
               }
             }
           )
         }.recoverWith {
         case _ =>
-          Future.successful(Ok(upload("There has been a problem saving the fixture information to the database.", true)))
+          Future.successful(Ok(uploadPage("There has been a problem saving the fixture information to the database.", true)))
       }
   }
 }

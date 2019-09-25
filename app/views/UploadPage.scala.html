@@ -1,6 +1,7 @@
 @import helper._
 @import forms.TeamForm
 
+@this(main: Main)
 @(message: String, hasSubmitted: Boolean = false)(implicit request: RequestHeader, messages: Messages)
 
 @main("Upload Fixtures") {

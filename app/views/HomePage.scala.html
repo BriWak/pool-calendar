@@ -2,6 +2,7 @@
 @import forms.TeamForm
 @import models.Team
 
+@this(main: Main)
 @(teamForm: Form[TeamForm], teams: Seq[Team])(implicit request: RequestHeader, messages: Messages)
 
 @main("BDPL Fixture Downloader") {

@@ -1,6 +1,7 @@
 @import forms.UserLoginForm
 @import helper._
 
+@this(main: Main)
 @(loginForm: Form[UserLoginForm], errorMsg: Option[String] = None)(implicit request: Request[_], messagesProvider: MessagesProvider)
 @main("Login") {
 
