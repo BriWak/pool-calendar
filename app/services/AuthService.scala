@@ -8,6 +8,7 @@ import repositories.SessionRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+
 class AuthService @Inject()(sessionRepository: SessionRepository,
                             passwordService: PasswordService) {
 

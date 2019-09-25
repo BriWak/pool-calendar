@@ -1,15 +1,12 @@
 package controllers
 
-import java.util.UUID
-
 import conf.ApplicationConfig
 import forms.UserLoginForm
 import javax.inject._
-import models.UserSession
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
-import services.{AuthService, PasswordService}
+import services.AuthService
 import views.html.login
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,7 +27,7 @@ class LoginController @Inject()(cc: ControllerComponents,
     implicit request =>
       UserLoginForm.form().bindFromRequest.fold(
         formWithErrors => {
-          Future.successful(BadRequest(login(formWithErrors)))
+          Future.successful(BadRequest(login(formWithErrors, Some("Invalid Username or Password"))))
         },
         userData => {
           authService.checkCredentials(userData.username, userData.password).map { authed =>
@@ -38,7 +35,7 @@ class LoginController @Inject()(cc: ControllerComponents,
           if (authed.isDefined) {
             Redirect(controllers.routes.UploadController.uploadPage()).addingToSession("UUID" -> authed.get.uuid)
           } else {
-            Unauthorized(login(UserLoginForm.form()))
+            Unauthorized(login(UserLoginForm.form(), Some("Invalid Username or Password")))
           }
           }
         }
