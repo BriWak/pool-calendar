@@ -26,7 +26,14 @@
         <ul class="topnav">
             <li class="title">BDPL Fixtures</li>
             <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index().url}">Home</a></li>
-            <li><a class="@("active".when(title == "View Fixtures"))" href="@{controllers.routes.ViewFixturesController.onPageLoad("Annitsford Irish B").url}">View Fixtures</a></li>
+            <li class="dropdown">
+                <a class="dropbtn @("active".when(title == "View Fixtures"))" href="javascript:void(0)">View Fixtures</a>
+            <div class="dropdown-content">
+                <a href="@{controllers.routes.ViewFixturesController.onPageLoad("Annitsford Irish B").url}">Annitsford Irish B</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+            </div>
+            </li>
             <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.onPageLoad().url}">Admin</a></li>
         </ul>
 

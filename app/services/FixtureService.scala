@@ -1,7 +1,6 @@
 package services
 
 import java.time.{LocalDate, LocalTime}
-import java.util.Calendar
 
 import com.google.inject.Inject
 import conf.ApplicationConfig
@@ -23,6 +22,10 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
 
   def getAllTeams: Future[List[Team]] = {
     teamRepository.findAllTeams()
+  }
+
+  def getAllTeamNames: Future[List[String]] = {
+    teamRepository.findAllTeams().map(_.map(team => team.name))
   }
 
   def getTeamFromName(name: String): Future[Option[Team]] = {
