@@ -1,7 +1,7 @@
 package utils
 
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.{LocalDate, LocalTime}
+import java.time.format.DateTimeFormatter
 
 object DateHelper {
 
@@ -10,20 +10,20 @@ object DateHelper {
   val ICAL_DATE_FORMAT = "yyyyMMdd"
   val ICAL_TIME_FORMAT = "HHmmss"
 
-
-  def getDateAsString(d: Date): String = {
-    val dateFormat = new SimpleDateFormat(ICAL_DATE_FORMAT)
-    dateFormat.format(d)
+  def getDateAsString(d: LocalDate): String = {
+    d.format(DateTimeFormatter.ofPattern(ICAL_DATE_FORMAT))
   }
 
-  def getTimeAsString(d: Date): String = {
-    val dateFormat = new SimpleDateFormat(ICAL_TIME_FORMAT)
-    dateFormat.format(d)
+  def getTimeAsString(d: LocalTime): String = {
+    d.format(DateTimeFormatter.ofPattern(ICAL_TIME_FORMAT))
   }
 
-  def convertStringToDate(s: String): Date = {
-    val dateFormat = new SimpleDateFormat(DATE_FORMAT)
-    dateFormat.parse(s)
+  def getPrintableDate(d: LocalDate): String = {
+    d.format(DateTimeFormatter.ofPattern(DATE_FORMAT))
+  }
+
+  def convertStringToDate(s: String): LocalDate = {
+    LocalDate.parse(s, DateTimeFormatter.ofPattern(DATE_FORMAT))
   }
 
 

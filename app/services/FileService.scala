@@ -1,7 +1,7 @@
 package services
 
 import java.io.File
-import java.util.Date
+import java.time.LocalDate
 
 import com.google.inject.Inject
 import conf.ApplicationConfig
@@ -85,7 +85,7 @@ class FileService @Inject()(fileConnector: FileConnector,
     }
   }
 
-  private def createFixture(date: Date, homeTeam: Int, awayTeam: Int): Fixture = {
+  private def createFixture(date: LocalDate, homeTeam: Int, awayTeam: Int): Fixture = {
     val teams = getTeams()
     val home = teams.find(_.number == homeTeam)
     val away = teams.find(_.number == awayTeam)

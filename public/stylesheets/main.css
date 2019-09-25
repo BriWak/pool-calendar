@@ -128,10 +128,49 @@ p {
     color: black;
 }
 
+#fixtureTable {
+    margin-left:auto;
+    margin-right:auto;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#fixtureTable td, #fixtureTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#fixtureTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#fixtureTable tr:hover {background-color: #ddd;}
+
+#fixtureTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: centre;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.gameWeek {
+    font-weight: bold;
+    border: 3px solid green;
+}
+
 @media screen and (max-width: 600px) {
   .content {
     width: 90%;
     margin-top: 5px;
+  }
+
+  #fixtureTable {
+    font-size: 60%;
+  }
+
+  #fixtureTable td, #fixtureTable th {
+    border: 1px solid #ddd;
+    padding: 2px;
   }
 
   .filealert {

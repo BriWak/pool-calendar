@@ -7,11 +7,13 @@
 GET     /                           controllers.HomeController.index
 GET     /download                   controllers.HomeController.downloadCalendar
 
-GET     /upload                     controllers.UploadController.onPageLoad
-POST    /upload                     controllers.UploadController.uploadFile
+GET     /fixtures/:team             controllers.ViewFixturesController.onPageLoad(team: String)
 
-GET     /admin                      controllers.LoginController.onPageLoad
-POST    /admin                      controllers.LoginController.onSubmit
+GET     /admin                      controllers.UploadController.onPageLoad
+POST    /admin                      controllers.UploadController.uploadFile
+
+GET     /login                      controllers.LoginController.onPageLoad
+POST    /login                      controllers.LoginController.onSubmit
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

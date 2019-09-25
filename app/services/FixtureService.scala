@@ -1,5 +1,6 @@
 package services
 
+import java.time.{LocalDate, LocalTime}
 import java.util.Calendar
 
 import com.google.inject.Inject
@@ -67,8 +68,8 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
           val (fixture, index) = data
           List(
             "BEGIN:VEVENT",
-            s"DTSTAMP:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z",
-            s"UID:${getDateAsString(Calendar.getInstance().getTime)}T${getTimeAsString(Calendar.getInstance().getTime)}Z-${index}",
+            s"DTSTAMP:${getDateAsString(LocalDate.now())}T${getTimeAsString(LocalTime.now())}Z",
+            s"UID:${getDateAsString(LocalDate.now())}T${getTimeAsString(LocalTime.now())}Z-${index}",
             s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T$startTime",
             s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T$endTime",
             s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}",

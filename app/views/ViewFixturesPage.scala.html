@@ -1,0 +1,29 @@
+@import utils.DateHelper._
+@import java.time.LocalDate
+
+@this(main: Main)
+@(fixtures: List[Fixture], teamName: String)
+
+@main("View Fixtures") {
+
+<!--    <img src="@routes.Assets.versioned("images/construction.png")" alt="">-->
+
+<table id="fixtureTable">
+    <tr><th colspan="4">@teamName</th></tr>
+    <tr>
+        <th>Date</th>
+        <th>Home Team</th>
+        <th>Away Team</th>
+        <th>Venue</th>
+    </tr>
+    @for(fixture <- fixtures) {
+    <tr class="@("gameWeek".when(LocalDate.now().isEqual(fixture.date) ||
+    (LocalDate.now().isBefore(fixture.date) && LocalDate.now().plusWeeks(1).isAfter(fixture.date))))">
+        <td>@getPrintableDate(fixture.date)</td>
+        <td>@fixture.homeTeam.name</td>
+        <td>@fixture.awayTeam.name</td>
+        <td>@fixture.venue</td>
+    </tr>
+    }
+</table>
+}
