@@ -53,15 +53,16 @@ ul.topnav li.title {
 }
 
 ul.topnav .dropdown-content {
-  display: none;
-  position: absolute;
+    display: none;
+    position: absolute;
 }
+
 ul.topnav .dropdown-content a {
-  color: white;
-  background-color: #333;
+    color: white;
+    background-color: #333;
 }
 ul.topnav .show {
-  display: block;
+    display: block;
 }
 
 .caret-down:after{
@@ -74,4 +75,8 @@ ul.topnav .show {
     ul.topnav li.title {transform: none; position: relative; left: 0%;}
     .dropdown-content {width: 100%;}
     body {padding-top: 185px;}
+    ul.topnav .dropdown-content {
+      max-height: 450px;
+      overflow-y: auto;
+    }
 }

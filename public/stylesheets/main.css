@@ -137,8 +137,8 @@ p {
 }
 
 #fixtureTable td, #fixtureTable th {
-  border: 1px solid #ddd;
-  padding: 8px;
+    border: 1px solid #ddd;
+    padding: 8px;
 }
 
 #fixtureTable tr:nth-child(even){background-color: #f2f2f2;}
@@ -146,11 +146,11 @@ p {
 #fixtureTable tr:hover {background-color: #ddd;}
 
 #fixtureTable th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: centre;
-  background-color: #4CAF50;
-  color: white;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: centre;
+    background-color: #4CAF50;
+    color: white;
 }
 
 .gameWeek {
