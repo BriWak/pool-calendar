@@ -74,7 +74,7 @@ ul.topnav .show {
     ul.topnav li {float: none;}
     ul.topnav li.title {transform: none; position: relative; left: 0%;}
     .dropdown-content {width: 100%;}
-    body {padding-top: 185px;}
+    body {padding-top: 190px; padding-bottom: 10px }
     ul.topnav .dropdown-content {
       max-height: 450px;
       overflow-y: auto;

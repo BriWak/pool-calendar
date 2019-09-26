@@ -5,7 +5,7 @@
     margin-top: 10px;
     width: 50%;
     border: 3px solid green;
-    padding: 10px;
+    padding: 5px;
 }
 
 img {
@@ -160,7 +160,7 @@ p {
 
 @media screen and (max-width: 600px) {
   .content {
-    width: 90%;
+    width: 95%;
     margin-top: 5px;
   }
 
