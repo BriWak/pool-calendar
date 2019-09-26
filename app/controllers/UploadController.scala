@@ -1,7 +1,7 @@
 package controllers
 
 import conf.ApplicationConfig
-import controllers.auth.AuthAction
+import controllers.auth.{AuthAction, TeamAction}
 import javax.inject._
 import models.{FixtureList, Team}
 import play.api.Environment
@@ -14,6 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class UploadController @Inject()(cc: ControllerComponents,
+                                 teamAction: TeamAction,
                                  fixtureService: FixtureService,
                                  environment: Environment,
                                  appConfig: ApplicationConfig,
@@ -24,11 +25,11 @@ class UploadController @Inject()(cc: ControllerComponents,
                                 (implicit ec: ExecutionContext
                                 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = authAction { implicit request: Request[AnyContent] =>
+  def onPageLoad: Action[AnyContent] = (authAction andThen teamAction) { implicit request =>
     Ok(uploadPage("File Upload"))
   }
 
-  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = authAction(parse.multipartFormData).async {
+  def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = (authAction andThen teamAction)(parse.multipartFormData).async {
     implicit request =>
       request.body.file("fileUpload").map(fileService.saveFile)
         .fold(Future.successful(Redirect(routes.UploadController.onPageLoad()))) { csv =>

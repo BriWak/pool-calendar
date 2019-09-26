@@ -3,9 +3,9 @@
 @import models.Team
 
 @this(main: Main)
-@(teamForm: Form[TeamForm], teams: Seq[Team])(implicit request: RequestHeader, messages: Messages)
+@(teamForm: Form[TeamForm], teams: Seq[Team])(implicit request: TeamRequest[_], messages: Messages)
 
-@main("BDPL Fixture Downloader") {
+@main("BDPL Fixture Downloader", request.teamList) {
 <div class="center">
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
     <h1>Download Fixtures</h1>

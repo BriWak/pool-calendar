@@ -6,7 +6,7 @@
  *@
 
 @this()
-@(title: String)(content: Html)
+@(title: String, teamList: List[String] = Nil)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,9 +29,9 @@
             <li class="dropdown">
                 <a class="dropbtn @("active".when(title == "View Fixtures"))" href="javascript:void(0)">View Fixtures</a>
             <div class="dropdown-content">
-                <a href="@{controllers.routes.ViewFixturesController.onPageLoad("Annitsford Irish B").url}">Annitsford Irish B</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
+                @for(teamName <- teamList) {
+                <a href="@{controllers.routes.ViewFixturesController.onPageLoad(teamName).url}">@teamName</a>
+                }
             </div>
             </li>
             <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.onPageLoad().url}">Admin</a></li>

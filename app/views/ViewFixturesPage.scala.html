@@ -2,9 +2,9 @@
 @import java.time.LocalDate
 
 @this(main: Main)
-@(fixtures: List[Fixture], teamName: String)
+@(fixtures: List[Fixture], teamName: String)(implicit request: TeamRequest[_], messages: Messages)
 
-@main("View Fixtures") {
+@main("View Fixtures", request.teamList) {
 
 <!--    <img src="@routes.Assets.versioned("images/construction.png")" alt="">-->
 

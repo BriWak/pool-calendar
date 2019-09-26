@@ -1,6 +1,7 @@
 package controllers
 
 import conf.ApplicationConfig
+import controllers.auth.TeamAction
 import forms.UserLoginForm
 import javax.inject._
 import play.api.i18n.I18nSupport
@@ -14,17 +15,18 @@ import scala.concurrent.Future
 
 @Singleton
 class LoginController @Inject()(cc: ControllerComponents,
+                                teamAction: TeamAction,
                                 authService: AuthService,
                                 appConfig: ApplicationConfig,
                                 sessionRepository: SessionRepository,
                                 loginPage: LoginPage) extends AbstractController(cc) with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = Action {
+  def onPageLoad(): Action[AnyContent] = teamAction {
     implicit request =>
       Unauthorized(loginPage(UserLoginForm.form()))
   }
 
-  def onSubmit(): Action[AnyContent] = Action.async {
+  def onSubmit(): Action[AnyContent] = teamAction.async {
     implicit request =>
       UserLoginForm.form().bindFromRequest.fold(
         formWithErrors => {

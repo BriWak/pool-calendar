@@ -1,8 +1,8 @@
 package controllers
 
+import controllers.auth.TeamAction
 import forms.TeamForm
 import javax.inject._
-import models.Team
 import play.api.mvc._
 import services.FixtureService
 import views.html.HomePage
@@ -12,17 +12,18 @@ import scala.concurrent.Future
 
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
+                               teamAction: TeamAction,
                                fixtureService: FixtureService,
                                homePage: HomePage
                               ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def index(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+  def index(): Action[AnyContent] = teamAction.async { implicit request =>
     fixtureService.getAllTeams.map { teams =>
       Ok(homePage(TeamForm.form, teams))
     }
   }
 
-  def downloadCalendar(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+  def downloadCalendar(): Action[AnyContent] = teamAction.async { implicit request =>
     TeamForm.form.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(formWithErrors.errors.toString))

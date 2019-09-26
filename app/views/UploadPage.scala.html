@@ -2,9 +2,9 @@
 @import forms.TeamForm
 
 @this(main: Main)
-@(message: String, hasSubmitted: Boolean = false)(implicit request: RequestHeader, messages: Messages)
+@(message: String, hasSubmitted: Boolean = false)(implicit request: TeamRequest[_], messages: Messages)
 
-@main("Upload Fixtures") {
+@main("Upload Fixtures", request.teamList) {
 
 @form(action = CSRF(routes.UploadController.uploadFile), Symbol("enctype") -> "multipart/form-data") {
 <input type="file" name="fileUpload" id="file" class="inputfile"/>
