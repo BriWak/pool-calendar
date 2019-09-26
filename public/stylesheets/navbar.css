@@ -60,16 +60,18 @@ ul.topnav .dropdown-content a {
   color: white;
   background-color: #333;
 }
-ul.topnav .dropdown:hover > .dropdown-content {
+ul.topnav .show {
   display: block;
+}
+
+.caret-down:after{
+    content: "\25bc";
 }
 
 @media screen and (max-width: 600px) {
     ul.topnav li.right,
     ul.topnav li {float: none;}
     ul.topnav li.title {transform: none; position: relative; left: 0%;}
-
-    body {
-        padding-top: 185px;
-    }
+    .dropdown-content {width: 100%;}
+    body {padding-top: 185px;}
 }
