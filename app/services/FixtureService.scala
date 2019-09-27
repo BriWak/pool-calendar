@@ -4,15 +4,17 @@ import java.time.{LocalDate, LocalTime}
 
 import com.google.inject.Inject
 import conf.ApplicationConfig
-import models.{Fixture, Team}
-import repositories.{FixtureRepository, TeamRepository}
+import models.{Fixture, League, Team}
+import repositories.{FixtureRepository, LeagueRepository, TeamRepository}
 import utils.DateHelper._
+import utils.LeagueHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class FixtureService @Inject()(appConfig: ApplicationConfig,
                                teamRepository: TeamRepository,
+                               leagueRepository: LeagueRepository,
                                fixtureRepository: FixtureRepository) {
 
   def getAllFixturesForTeam(team: Team): Future[List[Fixture]] = {
@@ -20,16 +22,31 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
       fixtureList.get.fixtures)
   }
 
-  def getAllTeams: Future[List[Team]] = {
-    teamRepository.findAllTeams()
+  def getLeague(league: String): Future[League] = {
+    leagueRepository.findLeague(league).map(_.getOrElse(throw new Exception("League is not available")))
   }
 
-  def getAllTeamNames: Future[List[String]] = {
-    teamRepository.findAllTeams().map(_.map(team => team.name))
+  def getAllTeams(league: String): Future[List[Team]] = {
+    leagueRepository.findLeague(league).map { league =>
+      league.get.teams
+    }
+  }
+
+  def getAllTeamNames(league: String): Future[List[String]] = {
+    leagueRepository.findLeague(league).map { league =>
+      league.get.teams.map{ team =>
+        team.name
+      }
+    }
+  }
+
+  def getAllTeamNamesForAllLeagues: Future[List[String]] = {
+    val allLeagues: Future[List[League]] = Future.sequence(LeagueHelper.leagues.map(getLeague))
+    allLeagues.map(leagues => leagues.)
   }
 
   def getTeamFromName(name: String): Future[Option[Team]] = {
-    teamRepository.findTeamByName(name)
+    leagueRepository.findTeamByName(name)
   }
 
   def createCalendar(team: Team): Future[String] = {

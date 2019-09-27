@@ -3,9 +3,11 @@ package controllers
 import controllers.auth.TeamAction
 import forms.TeamForm
 import javax.inject._
+import models.League
 import play.api.mvc._
 import services.FixtureService
 import views.html.HomePage
+import utils.LeagueHelper._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -18,12 +20,18 @@ class HomeController @Inject()(cc: ControllerComponents,
                               ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def index(): Action[AnyContent] = teamAction.async { implicit request =>
-    fixtureService.getAllTeams.map { teams =>
-      Ok(homePage(TeamForm.form, teams))
+    Future.sequence {
+      leagues.map { league =>
+        fixtureService.getLeague(league)
+      }
+    }.map { allLeagues =>
+      Ok(homePage(TeamForm.form, allLeagues))
     }
   }
 
-  def downloadCalendar(): Action[AnyContent] = teamAction.async { implicit request =>
+  def downloadCalendar(): Action[AnyContent] = teamAction.async {
+
+  implicit request =>
     TeamForm.form.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(formWithErrors.errors.toString))

@@ -3,7 +3,7 @@ package controllers
 import conf.ApplicationConfig
 import controllers.auth.{AuthAction, TeamAction}
 import javax.inject._
-import models.{FixtureList, Team}
+import models.{FixtureList, League, Team}
 import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
@@ -34,12 +34,14 @@ class UploadController @Inject()(cc: ControllerComponents,
       request.body.file("fileUpload").map(fileService.saveFile)
         .fold(Future.successful(Redirect(routes.UploadController.onPageLoad()))) { csv =>
           csv.fold(errorMessage => Future.successful(Ok(uploadPage(errorMessage, true))),
-            successMessage => {
+            successData => {
+              val (successMessage, league) = successData
               val allTeams: List[Team] = fileService.getTeams()
               val allFixtures: List[FixtureList] = allTeams.map(fileService.getFixturesForTeam)
-              val teams = mongoService.uploadAllTeams(allTeams)
+              val leagueUpload = mongoService.uploadLeague(League(league, allTeams))
+//              val teams = mongoService.uploadAllTeams(league, allTeams)
               val fixtures = mongoService.uploadAllFixturesForAllTeams(allFixtures)
-              for {_ <- teams
+              for {_ <- leagueUpload
                    _ <- fixtures
                    } yield {
                 Ok(uploadPage(successMessage, true))
