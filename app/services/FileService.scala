@@ -10,15 +10,16 @@ import models.{Fixture, FixtureList, FixtureWeek, Team}
 import play.api.libs.Files
 import play.api.mvc.MultipartFormData
 import utils.DateHelper._
+import utils.LeagueHelper._
 
 class FileService @Inject()(fileConnector: FileConnector,
                             appConfig: ApplicationConfig) {
 
   def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]): Either[String, String] = {
-    val filename = file.filename
-    if (filename.takeRight(4) == ".csv") {
+    val filename = file.filename.trim
+    if (leagues.contains(filename.dropRight(4)) && filename.takeRight(4) == ".csv") {
       file.ref.moveFileTo(new File(s"${appConfig.fixturesFilePath}Pool fixtures.csv"), replace = true)
-      Right("The file has been successfully uploaded.")
+      Right(filename.dropRight(4))
     } else {
       Left("The file type is incorrect, only CSV files are supported.")
     }

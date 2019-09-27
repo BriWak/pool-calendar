@@ -48,6 +48,11 @@ img {
     transform: scale(0.99);
 }
 
+.erase {
+    background: red;
+    margin-bottom: 20px;
+}
+
 label {
     padding: 12px 12px 12px 12px;
     display: inline-block;
@@ -156,6 +161,18 @@ p {
 .gameWeek {
     font-weight: bold;
     border: 3px solid green;
+}
+
+.leagues {
+    display: inline-block;
+}
+
+ul.leagues {
+    list-style-type: square;
+    list-style-position: outside;
+    margin: 0;
+    padding: 0;
+    text-align: left;
 }
 
 @media screen and (max-width: 600px) {

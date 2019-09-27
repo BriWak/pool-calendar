@@ -2,9 +2,24 @@
 @import forms.TeamForm
 
 @this(main: Main)
-@(message: String, hasSubmitted: Boolean = false)(implicit request: TeamRequest[_], messages: Messages)
+@(message: String, leagues: List[League], hasSubmitted: Boolean = false)(implicit request: TeamRequest[_], messages: Messages)
 
 @main("Upload Fixtures", request.teamList) {
+
+@if(leagues.nonEmpty) {
+    <p>Fixtures for the following leagues are in the database:</p>
+    <div class="leagues">
+        <ul class="leagues">
+        @for(league <- leagues) {
+            <li>@league.name</li>
+        }
+        </ul>
+    </div>
+} else {
+    <p>There are no fixtures are in the database:</p>
+}
+
+<p>To add fixtures please upload a valid CSV file with fixture information below.</p>
 
 @form(action = CSRF(routes.UploadController.uploadFile), Symbol("enctype") -> "multipart/form-data") {
 <input type="file" name="fileUpload" id="file" class="inputfile"/>
@@ -18,6 +33,14 @@
     <input type="submit" value="Upload" class="button">
     </p>
 }
+
+<p>To erase all fixtures click below.</p>
+<p><strong>Do not do this unless you are ready to upload fixtures for a new season.</strong></p>
+
+@form(action =  CSRF(controllers.routes.UploadController.resetDatabase)) {
+    <input type="submit" value="Erase Database" class="button erase">
+}
+
 @if(hasSubmitted) {
 <div id="fileUploaded" class="filealert">
     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>

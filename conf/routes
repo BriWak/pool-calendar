@@ -5,12 +5,14 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-GET     /download                   controllers.HomeController.downloadCalendar
+POST    /download                   controllers.HomeController.downloadCalendar
 
 GET     /fixtures/:team             controllers.ViewFixturesController.onPageLoad(team: String)
 
 GET     /admin                      controllers.UploadController.onPageLoad
 POST    /admin                      controllers.UploadController.uploadFile
+
+POST    /delete                     controllers.UploadController.resetDatabase
 
 GET     /login                      controllers.LoginController.onPageLoad
 POST    /login                      controllers.LoginController.onSubmit

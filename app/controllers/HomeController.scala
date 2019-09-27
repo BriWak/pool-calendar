@@ -31,7 +31,7 @@ class HomeController @Inject()(cc: ControllerComponents,
       formData => {
         for {
           teamOption <- fixtureService.getTeamFromName(formData.teamName)
-          team = teamOption.getOrElse(throw new Exception)
+          team = teamOption.getOrElse(throw new Exception("Team not found"))
           calendar <- fixtureService.createCalendar(team)
         } yield {
             Ok(calendar).as("text/calendar").withHeaders(

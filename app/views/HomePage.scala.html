@@ -11,6 +11,7 @@
     <h1>Download Fixtures</h1>
     <p>This will download a calendar containing all of the selected team's fixtures for the current season and give you the option to add them to your calendar.</p>
     @form(action = routes.HomeController.downloadCalendar()){
+    @CSRF.formField
     @select(
         field = teamForm("name"),
         options = teams.map(team => (team.name.toString -> team.name.toString)),
