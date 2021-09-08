@@ -1,7 +1,10 @@
 @import helper._
-@import forms.TeamForm
+@import views.html.components.FormWithCSRF
 
-@this(main: Main)
+@this(
+        main: Main,
+        formHelper: FormWithCSRF
+)
 @(message: String, leagues: List[League], hasSubmitted: Boolean = false)(implicit request: TeamRequest[_], messages: Messages)
 
 @main("Upload Fixtures", request.teamList) {
@@ -21,7 +24,7 @@
 
 <p>To add fixtures please upload a valid CSV file with fixture information below.</p>
 
-@form(action = CSRF(routes.UploadController.uploadFile), Symbol("enctype") -> "multipart/form-data") {
+@formHelper(action = routes.UploadController.uploadFile, Symbol("enctype") -> "multipart/form-data") {
 <input type="file" name="fileUpload" id="file" class="inputfile"/>
 <label for="file">
     <svg width="20" height="17" viewBox="0 0 20 17">
@@ -37,7 +40,7 @@
 <p>To erase all fixtures click below.</p>
 <p><strong>Do not do this unless you are ready to upload fixtures for a new season.</strong></p>
 
-@form(action =  CSRF(controllers.routes.UploadController.resetDatabase)) {
+@formHelper(action =  controllers.routes.UploadController.resetDatabase) {
     <input type="submit" value="Erase Database" class="button erase">
 }
 

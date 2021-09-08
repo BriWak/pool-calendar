@@ -1,8 +1,13 @@
 @import helper._
 @import forms.TeamForm
 @import models.Team
+@import views.html.components.FormWithCSRF
 
-@this(main: Main)
+@this(
+        main: Main,
+        formHelper: FormWithCSRF
+)
+
 @(teamForm: Form[TeamForm], teams: Seq[Team])(implicit request: TeamRequest[_], messages: Messages)
 
 @main("BDPL Fixture Downloader", request.teamList) {
@@ -10,8 +15,7 @@
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
     <h1>Download Fixtures</h1>
     <p>This will download a calendar containing all of the selected team's fixtures for the current season and give you the option to add them to your calendar.</p>
-    @form(action = routes.HomeController.downloadCalendar()){
-    @CSRF.formField
+    @formHelper(action = routes.HomeController.downloadCalendar()){
     @select(
         field = teamForm("name"),
         options = teams.map(team => (team.name.toString -> team.name.toString)),

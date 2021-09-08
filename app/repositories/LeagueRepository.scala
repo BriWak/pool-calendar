@@ -1,23 +1,23 @@
 package repositories
 
 import com.google.inject.Inject
-import models.{League, Team}
-import play.api.libs.json.Json
+import models.League
+import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.Cursor
-import reactivemongo.play.json._
-import reactivemongo.play.json.collection._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class LeagueRepository @Inject()(
                       val reactiveMongoApi: ReactiveMongoApi
-                     ) extends ReactiveMongoComponents {
+                     ) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
 
-  def collection: Future[JSONCollection] = {
-    reactiveMongoApi.database.map(_.collection[JSONCollection]("Leagues"))
-  }
+  override val collectionName: String = "Leagues"
+
+  override val cacheTtl: Option[Int] = None
+
+  override val lastUpdatedIndexName: String = "leagues-created-at-index"
 
   def create(value: League): Future[Boolean] = {
     collection.flatMap(_.insert.one(value)).map(_.ok)

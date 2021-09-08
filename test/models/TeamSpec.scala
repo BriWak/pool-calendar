@@ -1,9 +1,8 @@
 package models
 
-import org.scalatest.MustMatchers
-import org.scalatestplus.play.PlaySpec
+import base.SpecBase
 
-class TeamSpec extends PlaySpec with MustMatchers {
+class TeamSpec extends SpecBase {
 
   "The custom apply method" should {
 

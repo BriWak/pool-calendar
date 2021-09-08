@@ -2,11 +2,11 @@ package controllers
 
 import controllers.auth.TeamAction
 import forms.TeamForm
-import javax.inject._
 import play.api.mvc._
 import services.FixtureService
 import views.html.HomePage
 
+import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

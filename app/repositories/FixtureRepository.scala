@@ -2,21 +2,21 @@ package repositories
 
 import com.google.inject.Inject
 import models.{FixtureList, Team}
-import play.api.libs.json.Json
+import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
-import reactivemongo.play.json._
-import reactivemongo.play.json.collection._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class FixtureRepository @Inject()(
                       val reactiveMongoApi: ReactiveMongoApi
-                     ) extends ReactiveMongoComponents {
+                     ) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
 
-  def collection: Future[JSONCollection] = {
-    reactiveMongoApi.database.map(_.collection[JSONCollection]("Fixtures"))
-  }
+  override val collectionName: String = "Fixtures"
+
+  override val cacheTtl: Option[Int] = None
+
+  override val lastUpdatedIndexName: String = "fixtures-created-at-index"
 
   def create(value: FixtureList): Future[Boolean] = {
     collection.flatMap(_.insert.one(value)).map(_.ok)
