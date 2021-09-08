@@ -1,12 +1,12 @@
 package controllers
 
 import controllers.auth.TeamAction
-import javax.inject._
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.FixtureService
 import views.html.ViewFixturesPage
 
+import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton

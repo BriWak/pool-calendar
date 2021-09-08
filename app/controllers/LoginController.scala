@@ -1,15 +1,13 @@
 package controllers
 
-import conf.ApplicationConfig
 import controllers.auth.TeamAction
 import forms.UserLoginForm
-import javax.inject._
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import repositories.SessionRepository
 import services.AuthService
 import views.html.LoginPage
 
+import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -17,8 +15,6 @@ import scala.concurrent.Future
 class LoginController @Inject()(cc: ControllerComponents,
                                 teamAction: TeamAction,
                                 authService: AuthService,
-                                appConfig: ApplicationConfig,
-                                sessionRepository: SessionRepository,
                                 loginPage: LoginPage) extends AbstractController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = teamAction {

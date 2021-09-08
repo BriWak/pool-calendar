@@ -1,17 +1,15 @@
 package controllers.auth
 
-import com.google.inject.Inject
-import conf.ApplicationConfig
+import com.google.inject.{ImplementedBy, Inject}
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import services.AuthService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthAction @Inject()(val parser: BodyParsers.Default,
-                           appConfig: ApplicationConfig,
+class AuthActionImpl @Inject()(val parser: BodyParsers.Default,
                            authService: AuthService)(implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[Request, AnyContent] with ActionRefiner[Request, Request] {
+  extends AuthAction {
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, Request[A]]] = {
 
@@ -29,3 +27,6 @@ class AuthAction @Inject()(val parser: BodyParsers.Default,
     }
   }
 }
+
+@ImplementedBy(classOf[AuthActionImpl])
+trait AuthAction extends ActionBuilder[Request, AnyContent] with ActionRefiner[Request, Request]

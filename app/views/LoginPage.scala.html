@@ -1,17 +1,18 @@
 @import forms.UserLoginForm
 @import helper._
+@import views.html.components.FormWithCSRF
 
-@this(main: Main)
+@this(main: Main, formHelper: FormWithCSRF)
+
 @(loginForm: Form[UserLoginForm], errorMsg: Option[String] = None)(implicit request: TeamRequest[_], messagesProvider: MessagesProvider)
 @main("Login", request.teamList) {
 
-    @form(action = controllers.routes.LoginController.onSubmit, Symbol("id") -> "login") {
+    @formHelper(action = controllers.routes.LoginController.onSubmit, Symbol("id") -> "login") {
         <h1 id="loginTitle">Enter your login details</h1>
         @if(errorMsg.isDefined) {
             <p class="error">@errorMsg</p>
         }
 
-        @CSRF.formField
         @inputText(
             loginForm("username"),
             Symbol("placeholder") -> "Username",

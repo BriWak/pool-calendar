@@ -1,58 +1,72 @@
 package controllers
 
+import base.SpecBase
+import controllers.actions.FakeTeamAction
+import controllers.auth.TeamAction
 import models.Team
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play._
-import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers.any
-import org.scalatestplus.play.guice._
-import play.api.test._
+import org.mockito.Mockito._
+import play.api
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
+import play.api.test._
 import services.FixtureService
+import views.html.HomePage
 
-class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
+import scala.concurrent.Future
+
+class HomeControllerSpec extends SpecBase {
 
   private val mockFixtureService = mock[FixtureService]
+  private val fakeTeamAction = app.injector.instanceOf[TeamAction]
+  private val view = app.injector.instanceOf[HomePage]
 
   "HomeController GET for index page" should {
 
     "render the index page from a new instance of controller" in {
+      when(mockFixtureService.getAllTeams).thenReturn(Future.successful(List.empty))
 
-      when(mockFixtureService.teams).thenReturn(List.empty)
-      val controller = new HomeController(stubControllerComponents(), mockFixtureService)
-      val home = controller.index().apply(FakeRequest(GET, "/"))
+      val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view)
+      val result = controller.index().apply(fakeRequest)
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("BDPL Fixture Downloader")
+      status(result) mustBe OK
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) must include ("BDPL Fixture Downloader")
     }
 
     "render the index page from the application" in {
       val controller = inject[HomeController]
-      val home = controller.index().apply(FakeRequest(GET, "/"))
+      val result = controller.index().apply(fakeRequest)
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("BDPL Fixture Downloader")
+      status(result) mustBe OK
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) must include ("BDPL Fixture Downloader")
     }
 
     "render the index page from the router" in {
-      val request = FakeRequest(GET, "/")
-      val home = route(app, request).get
+      val application: Application =
+        new GuiceApplicationBuilder()
+          .overrides(
+            api.inject.bind[TeamAction].toInstance(new FakeTeamAction(bodyParsers)),
+            api.inject.bind[FixtureService].toInstance(mockFixtureService)
+          ).build
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("BDPL Fixture Downloader")
+      val result = route(application, fakeRequest).get
+
+      status(result) mustBe OK
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) must include ("BDPL Fixture Downloader")
     }
   }
 
   "HomeController GET for download" should {
 
     "create the download from a new instance of controller" in {
-      when(mockFixtureService.getTeamFromName(any())).thenReturn(Some(Team("name","venue",1)))
-      when(mockFixtureService.createCalendar(any())).thenReturn("calendar")
+      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team("name","venue",1))))
+      when(mockFixtureService.createCalendar(any())).thenReturn(Future.successful("calendar"))
 
-      val controller = new HomeController(stubControllerComponents(), mockFixtureService)
+      val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view)
       val result = controller.downloadCalendar().apply(FakeRequest(GET, "/download").withFormUrlEncodedBody("name" -> "validName"))
 
       status(result) mustBe OK

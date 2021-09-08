@@ -3,37 +3,41 @@ package repositories
 import com.google.inject.Inject
 import conf.ApplicationConfig
 import models.UserSession
-import play.api.libs.json.Json
+import org.joda.time.DateTime
+import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
-import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
-import reactivemongo.play.json._
-import reactivemongo.play.json.collection._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SessionRepository @Inject()(val reactiveMongoApi: ReactiveMongoApi,
                                   config: ApplicationConfig
-                                 ) extends ReactiveMongoComponents {
+                                 ) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
 
-  def collection: Future[JSONCollection] = {
-    reactiveMongoApi.database.map(_.collection[JSONCollection]("Session"))
-  }
+  override val collectionName: String = "Session"
 
-  def create(session: UserSession): Future[Boolean] = {
-    collection.flatMap(_.indexesManager.ensure(Index(Seq("createdAt" -> IndexType.Ascending),
-      name = Some("createdAt"),
-      options = BSONDocument("expireAfterSeconds" -> config.expireAfterSeconds))))
-    collection.flatMap(_.insert.one(session)).map(_.ok)
+  override val cacheTtl: Option[Int] = Some(config.expireAfterSeconds)
+
+  override val lastUpdatedIndexName: String = "updatedAt"
+
+  def set(session: UserSession): Future[Boolean] = {
+    val modifier = Json.obj("$set" -> session.copy(updatedAt = DateTime.now))
+    val selector = Json.obj("uuid" -> session.uuid)
+
+    for {
+      col <- collection
+      r <- col.update(ordered = false).one(selector, modifier, upsert = true, multi = false)
+    } yield r.ok
   }
 
   def findByUsername(value: String): Future[Option[UserSession]] = {
-    collection.flatMap(_.find(Json.obj("username" -> value), Some(Json.obj())).one[UserSession])
+    val selector = Json.obj("username" -> value)
+    findCollectionAndUpdate[UserSession](selector)
   }
 
   def findByUuid(value: String): Future[Option[UserSession]] = {
-    collection.flatMap(_.find(Json.obj("uuid" -> value), Some(Json.obj())).one[UserSession])
+    val selector = Json.obj("uuid" -> value)
+    findCollectionAndUpdate[UserSession](selector)
   }
 
   def flush: Future[Boolean] = {

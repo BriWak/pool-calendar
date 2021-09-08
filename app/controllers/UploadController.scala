@@ -1,23 +1,18 @@
 package controllers
 
-import conf.ApplicationConfig
 import controllers.auth.{AuthAction, TeamAction}
-import javax.inject._
 import models.{FixtureList, League, Team}
-import play.api.Environment
 import play.api.libs.Files
 import play.api.mvc._
-import services.{FileService, FixtureService, MongoService}
+import services.{FileService, MongoService}
 import views.html.UploadPage
 
+import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class UploadController @Inject()(cc: ControllerComponents,
                                  teamAction: TeamAction,
-                                 fixtureService: FixtureService,
-                                 environment: Environment,
-                                 appConfig: ApplicationConfig,
                                  authAction: AuthAction,
                                  fileService: FileService,
                                  mongoService: MongoService,
