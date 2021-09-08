@@ -12,7 +12,7 @@ import scala.concurrent.Future
 class AuthService @Inject()(sessionRepository: SessionRepository,
                             passwordService: PasswordService) {
 
-  val passwordHash = "$2a$10$y5xXcLpJCO3UNDyOwQzoteTjvFFgjELglh8gb2Rqt7yx0ZnMmIhQi"
+  val passwordHash = "$2a$10$HKdRb9WT.acL1ODZqMtpJeFLtyClZLvvpKeGH2mhNU4hxcUzYOZEW"
 
   def checkCredentials(username: String, password: String): Future[Option[UserSession]] = {
     if (passwordService.checkHash(s"$username/$password", passwordHash)) {
@@ -26,7 +26,7 @@ class AuthService @Inject()(sessionRepository: SessionRepository,
 
   private def addAuthUUID(username: String): Future[UserSession] = {
     val userSession = UserSession(username, UUID.randomUUID().toString)
-    sessionRepository.create(userSession).map { _ =>
+    sessionRepository.set(userSession).map { _ =>
       userSession
     }
   }
