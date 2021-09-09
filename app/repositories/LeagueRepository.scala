@@ -5,6 +5,7 @@ import models.League
 import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.Cursor
+import reactivemongo.play.json.compat.json2bson._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -20,7 +21,7 @@ class LeagueRepository @Inject()(
   override val lastUpdatedIndexName: String = "leagues-created-at-index"
 
   def create(value: League): Future[Boolean] = {
-    collection.flatMap(_.insert.one(value)).map(_.ok)
+    collection.flatMap(_.insert.one(value)).map(_.writeConcernError.isEmpty)
   }
 
   def findLeagueByName(value: String): Future[Option[League]] = {
