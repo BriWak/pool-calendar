@@ -22,8 +22,9 @@ import play.api.Logging
 import play.api.libs.json.{JsObject, Json, OWrites, Reads}
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.WriteConcern
+import reactivemongo.api.bson.collection.BSONCollection
 import reactivemongo.api.indexes.IndexType
-import reactivemongo.play.json.collection.JSONCollection
+import reactivemongo.play.json.compat.json2bson._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,10 +41,10 @@ abstract class IndexesManager @Inject()(
 
   val lastUpdatedIndexName: String
 
-  def collection: Future[JSONCollection] =
+  def collection: Future[BSONCollection] =
     for {
       _ <- ensureIndexes
-      res <- mongo.database.map(_.collection[JSONCollection](collectionName))
+      res <- mongo.database.map(_.collection[BSONCollection](collectionName))
     } yield res
 
   def ensureIndexes: Future[Boolean] = {
@@ -55,35 +56,30 @@ abstract class IndexesManager @Inject()(
     )
 
     for {
-      collection              <- mongo.database.map(_.collection[JSONCollection](collectionName))
+      collection <- mongo.database.map(_.collection[BSONCollection](collectionName))
       createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
     } yield createdLastUpdatedIndex
   }
 
-  def findCollectionAndUpdate[T](selector: JsObject)(implicit rds: Reads[T]): Future[Option[T]] = {
+  def findAndUpdateSession(selector: JsObject)(implicit rds: Reads[UserSession]): Future[Option[UserSession]] = {
 
     val modifier = Json.obj(
       "$set" -> Json.obj(
         "updatedAt" -> UserSession.dateTimeWrite.writes(DateTime.now)
       )
     )
+    collection.flatMap(_.findAndUpdate(
+      selector = selector,
+      update = modifier,
+      fetchNewObject = true,
+      upsert = false,
+      sort = None,
+      fields = None,
+      bypassDocumentValidation = false,
+      writeConcern = WriteConcern.Default,
+      maxTime = None,
+      collation = None,
+      arrayFilters = Nil)).map(_.result[UserSession])
 
-    for {
-      col <- collection
-      r <- col.findAndUpdate(
-        selector = selector,
-        update = modifier,
-        fetchNewObject = true,
-        upsert = false,
-        sort = None,
-        fields = None,
-        bypassDocumentValidation = false,
-        writeConcern = WriteConcern.Default,
-        maxTime = None,
-        collation = None,
-        arrayFilters = Nil
-      )
-    } yield r.result[T]
   }
-
 }

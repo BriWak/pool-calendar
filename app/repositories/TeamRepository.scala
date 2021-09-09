@@ -5,7 +5,7 @@ import models.Team
 import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.Cursor
-
+import reactivemongo.play.json.compat.json2bson._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -20,11 +20,11 @@ class TeamRepository @Inject()(
   override val lastUpdatedIndexName: String = "teams-created-at-index"
 
   def create(value: Team): Future[Boolean] = {
-    collection.flatMap(_.insert.one(value)).map(_.ok)
+    collection.flatMap(_.insert.one(value)).map(_.writeConcernError.isEmpty)
   }
 
   def createAll(value: List[Team]): Future[Boolean] = {
-    collection.flatMap(_.insert.many(value)).map(_.ok)
+    collection.flatMap(_.insert.many(value)).map(_.writeConcernError.isEmpty)
   }
 
   def findTeamByName(value: String): Future[Option[Team]] = {
@@ -37,11 +37,11 @@ class TeamRepository @Inject()(
   }
 
   def updateTeam(value: Team, newValue: Team): Future[Boolean] ={
-    collection.flatMap(_.update.one(value, newValue)).map(_.ok)
+    collection.flatMap(_.update.one(value, newValue)).map(_.writeConcernError.isEmpty)
   }
 
   def deleteTeam(value: Team): Future[Boolean] = {
-    collection.flatMap(_.delete.one(value, Some(1))).map(_.ok)
+    collection.flatMap(_.delete.one(value, Some(1))).map(_.writeConcernError.isEmpty)
   }
 
   def flush: Future[Boolean] = {

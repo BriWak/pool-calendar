@@ -2,10 +2,10 @@ package base
 
 import controllers.actions.{FakeAuthAction, FakeTeamAction}
 import controllers.auth.{AuthAction, TeamAction}
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api
 import play.api.Application
@@ -17,7 +17,7 @@ import play.api.test.{FakeRequest, Injecting}
 
 import scala.concurrent.ExecutionContext
 
-trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with MustMatchers with Injecting with MockitoSugar with ScalaFutures {
+trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with Matchers with Injecting with MockitoSugar with ScalaFutures {
 
   def fakeRequest: Request[AnyContentAsEmpty.type] = FakeRequest(GET, "/")
 

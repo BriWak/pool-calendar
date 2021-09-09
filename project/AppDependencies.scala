@@ -4,13 +4,15 @@ object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "org.reactivemongo"      %% "play2-reactivemongo" % "0.20.13-play28",
-    "org.mindrot"             % "jbcrypt"             % "0.4"
+    "org.reactivemongo"      %% "play2-reactivemongo"            % "1.0.7-play28",
+    "org.reactivemongo"      %% "reactivemongo-play-json-compat" % "1.0.7-play28",
+    "org.mindrot"             % "jbcrypt"                        % "0.4"
   )
 
   val test: Seq[ModuleID] = Seq(
-    "org.scalatestplus.play" %% "scalatestplus-play"  % "5.0.0" % Test,
-    "org.mockito"             % "mockito-core"        % "3.0.0" % Test
+    "org.scalatestplus.play" %% "scalatestplus-play"  % "5.1.0"   % Test,
+    "org.scalatestplus"      %% "mockito-3-4"         % "3.2.9.0" % Test,
+    "org.mockito"             % "mockito-core"        % "3.12.4"  % Test
   )
 
   def apply(): Seq[ModuleID] = compile ++ test
