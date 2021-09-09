@@ -36,7 +36,14 @@ class HomeControllerSpec extends SpecBase {
     }
 
     "render the index page from the application" in {
-      val controller = inject[HomeController]
+      val app: Application =
+        new GuiceApplicationBuilder()
+          .overrides(
+            api.inject.bind[TeamAction].toInstance(new FakeTeamAction(bodyParsers)),
+            api.inject.bind[FixtureService].toInstance(mockFixtureService)
+          ).build
+
+      val controller = app.injector.instanceOf[HomeController]
       val result = controller.index().apply(fakeRequest)
 
       status(result) mustBe OK
