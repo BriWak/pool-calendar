@@ -25,7 +25,7 @@ object MongoIndex {
   def apply(key: Seq[(String, IndexType)],
             name: String,
             unique: Boolean = false,
-            expireAfterSeconds: Option[Int] = None): Index.Aux[BSONSerializationPack.type] = Index(BSONSerializationPack)(
+            expireAfterSeconds: Option[Int] = None): Index.Default = Index(BSONSerializationPack)(
     key = key,
     name = Some(name),
     unique = unique,
@@ -46,7 +46,6 @@ object MongoIndex {
     wildcardProjection = None,
     version = None,
     partialFilter = None,
-    options = BSONDocument.empty,
-    dropDups = false
+    options = BSONDocument.empty
   )
 }
