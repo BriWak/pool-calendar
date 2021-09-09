@@ -9,8 +9,9 @@ object AppDependencies {
   )
 
   val test: Seq[ModuleID] = Seq(
-    "org.scalatestplus.play" %% "scalatestplus-play"  % "5.0.0" % Test,
-    "org.mockito"             % "mockito-core"        % "3.0.0" % Test
+    "org.scalatestplus.play" %% "scalatestplus-play"  % "5.1.0"   % Test,
+    "org.scalatestplus"      %% "mockito-3-4"         % "3.2.9.0" % Test,
+    "org.mockito"             % "mockito-core"        % "3.12.4"  % Test
   )
 
   def apply(): Seq[ModuleID] = compile ++ test

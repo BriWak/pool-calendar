@@ -5,7 +5,7 @@ import controllers.actions.FakeTeamAction
 import controllers.auth.TeamAction
 import models.Team
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.when
 import play.api
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
