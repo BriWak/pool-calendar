@@ -17,11 +17,13 @@ class FileService @Inject()(fileConnector: FileConnector,
 
   def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]): Either[String, String] = {
     val filename = file.filename.trim
-    if (leagues.contains(filename.dropRight(4)) && filename.takeRight(4) == ".csv") {
+    if (filename.takeRight(4) != ".csv") {
+      Left("The file type is incorrect, only CSV files are supported.")
+    } else if (leagues.contains(filename.dropRight(4))) {
       file.ref.moveTo(new File(s"${appConfig.fixturesFilePath}Pool fixtures.csv"), replace = true)
       Right(filename.dropRight(4))
     } else {
-      Left("The file type is incorrect, only CSV files are supported.")
+      Left("The file name is incorrect, it must be the name of the league.")
     }
   }
 

@@ -22,7 +22,7 @@
     <p>There are no fixtures are in the database:</p>
 }
 
-<p>To add fixtures please upload a valid CSV file with fixture information below.</p>
+<p>To add fixtures please upload a valid CSV file with the name of the league, such as "Super League.csv".</p>
 
 @formHelper(action = routes.UploadController.uploadFile, Symbol("enctype") -> "multipart/form-data") {
 <input type="file" name="fileUpload" id="file" class="inputfile"/>
