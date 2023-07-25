@@ -1,5 +1,6 @@
 package controllers
 
+import conf.ApplicationConfig
 import controllers.auth.TeamAction
 import forms.TeamForm
 import play.api.mvc._
@@ -14,11 +15,15 @@ import scala.concurrent.Future
 class HomeController @Inject()(cc: ControllerComponents,
                                teamAction: TeamAction,
                                fixtureService: FixtureService,
+                               config:ApplicationConfig,
                                homePage: HomePage
                               ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def index: Action[AnyContent] = teamAction.async { implicit request =>
     fixtureService.getAllTeams.map { teams =>
+      println("*******************************************")
+      println(config.mongoUrI)
+      println("*******************************************")
       Ok(homePage(TeamForm.form, teams))
     }
   }

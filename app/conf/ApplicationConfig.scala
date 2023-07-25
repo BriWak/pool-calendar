@@ -17,4 +17,5 @@ class ApplicationConfig @Inject()(
   val fixtureStartTime: String = loadConfig("fixture.start.time")
   val fixtureEndTime: String = loadConfig("fixture.end.time")
   val expireAfterSeconds: Int = loadConfig("mongodb.expireAfterSeconds").toInt
+  val mongoUrI: String = loadConfig("mongodb.uri")
 }
