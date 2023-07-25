@@ -21,9 +21,17 @@ lazy val scoverageSettings = {
 }
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala)
+  .enablePlugins(PlayScala, AssemblyPlugin)
   .settings(
     scoverageSettings,
+    assembly / assemblyMergeStrategy := {
+      case "META-INF/io.netty.versions.properties" => MergeStrategy.first // Keep the first version found
+      case "module-info.class" => MergeStrategy.first // Keep the first version found
+      case "play/reference-overrides.conf" => MergeStrategy.first // Keep the first version found
+      case x =>
+        val oldStrategy = (assembly / assemblyMergeStrategy).value
+        oldStrategy(x)
+    },
     inConfig(Test)(testSettings),
     name := """pool-calendar""",
     organization := "com.example",

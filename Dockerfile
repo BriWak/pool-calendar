@@ -5,10 +5,10 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/scala-2.13/pool-calendar.jar /app/pool-calendar.jar
+COPY target/scala-2.13/pool-calendar-assemply-1.0.jar /app/pool-calendar.jar
 
-# Set the JVM options to limit memory usage
-ENV JAVA_OPTS="-Xmx128m -Xms64m"
+# Set the JVM options to limit memory usage (optional)
+ENV JVM_OPTIONS="-Xmx512m -Xms512m"
 
-# Run your application
-CMD ["java", "-jar", "your-project.jar"]
+# Run the JAR file
+CMD ["java", "$JVM_OPTIONS", "-jar", "pool-calendar.jar"]

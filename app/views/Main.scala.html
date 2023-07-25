@@ -25,7 +25,7 @@
 
         <ul class="topnav">
             <li class="title">BDPL Fixtures</li>
-            <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index().url}">Home</a></li>
+            <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index.url}">Home</a></li>
             <li class="dropdown">
                 <a class="dropbtn caret-down @("active".when(title == "View Fixtures"))" onclick="myFunction()" href="#">View Fixtures </a>
             <div id="myDropdown" class="dropdown-content">
@@ -34,7 +34,7 @@
                 }
             </div>
             </li>
-            <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.onPageLoad().url}">Admin</a></li>
+            <li class="right"><a class="@("active".when(title == "Login" || title == "Upload Fixtures"))" href="@{controllers.routes.UploadController.onPageLoad.url}">Admin</a></li>
         </ul>
 
         <div class="content">

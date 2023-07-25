@@ -15,7 +15,7 @@
     <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
     <h1>Download Fixtures</h1>
     <p>This will download a calendar containing all of the selected team's fixtures for the current season and give you the option to add them to your calendar.</p>
-    @formHelper(action = routes.HomeController.downloadCalendar()){
+    @formHelper(action = routes.HomeController.downloadCalendar){
     @select(
         field = teamForm("name"),
         options = teams.map(team => (team.name.toString -> team.name.toString)),

@@ -17,12 +17,12 @@ class AuthActionImpl @Inject()(val parser: BodyParsers.Default,
 
     sessionUUID.fold[Future[Either[Result, Request[A]]]] {
       Future.successful(
-        Left(Redirect(controllers.routes.LoginController.onPageLoad())))
+        Left(Redirect(controllers.routes.LoginController.onPageLoad)))
     } {
       uuid =>
         authService.isLoggedIn(uuid).map { loggedIn =>
           if (loggedIn) Right(request)
-          else Left(Redirect(controllers.routes.LoginController.onPageLoad()))
+          else Left(Redirect(controllers.routes.LoginController.onPageLoad))
         }
     }
   }

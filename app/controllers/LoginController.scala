@@ -17,12 +17,12 @@ class LoginController @Inject()(cc: ControllerComponents,
                                 authService: AuthService,
                                 loginPage: LoginPage) extends AbstractController(cc) with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = teamAction {
+  def onPageLoad: Action[AnyContent] = teamAction {
     implicit request =>
       Unauthorized(loginPage(UserLoginForm.form()))
   }
 
-  def onSubmit(): Action[AnyContent] = teamAction.async {
+  def onSubmit: Action[AnyContent] = teamAction.async {
     implicit request =>
       UserLoginForm.form().bindFromRequest.fold(
         formWithErrors => {
@@ -32,7 +32,7 @@ class LoginController @Inject()(cc: ControllerComponents,
           authService.checkCredentials(userData.username, userData.password).map { authed =>
 
           if (authed.isDefined) {
-            Redirect(controllers.routes.UploadController.onPageLoad()).addingToSession("UUID" -> authed.get.uuid)
+            Redirect(controllers.routes.UploadController.onPageLoad).addingToSession("UUID" -> authed.get.uuid)
           } else {
             Unauthorized(loginPage(UserLoginForm.form(), Some("Invalid Username or Password")))
           }

@@ -68,7 +68,7 @@ class LoginControllerSpec extends SpecBase {
       val result = controller.onSubmit().apply(FakeRequest(POST, "/login").withFormUrlEncodedBody("username" -> "username", "password" -> "password"))
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.UploadController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.UploadController.onPageLoad.url
     }
 
     "return a BadRequest when no login details are provided" in {

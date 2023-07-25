@@ -17,13 +17,13 @@ class HomeController @Inject()(cc: ControllerComponents,
                                homePage: HomePage
                               ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def index(): Action[AnyContent] = teamAction.async { implicit request =>
+  def index: Action[AnyContent] = teamAction.async { implicit request =>
     fixtureService.getAllTeams.map { teams =>
       Ok(homePage(TeamForm.form, teams))
     }
   }
 
-  def downloadCalendar(): Action[AnyContent] = teamAction.async { implicit request =>
+  def downloadCalendar: Action[AnyContent] = teamAction.async { implicit request =>
     TeamForm.form.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(formWithErrors.errors.toString))

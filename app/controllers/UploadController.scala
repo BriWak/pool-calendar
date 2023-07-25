@@ -29,7 +29,7 @@ class UploadController @Inject()(cc: ControllerComponents,
   def uploadFile: Action[MultipartFormData[Files.TemporaryFile]] = (authAction andThen teamAction)(parse.multipartFormData).async {
     implicit request =>
       request.body.file("fileUpload").map(fileService.saveFile)
-        .fold(Future.successful(Redirect(routes.UploadController.onPageLoad()))) { csv =>
+        .fold(Future.successful(Redirect(routes.UploadController.onPageLoad))) { csv =>
           csv.fold(errorMessage => Future.successful(Ok(uploadPage(errorMessage, List(), true))),
             filename => {
               val allTeams: List[Team] = fileService.getTeams()
