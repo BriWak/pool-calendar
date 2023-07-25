@@ -8,10 +8,10 @@ WORKDIR /app
 COPY . /app
 
 # Set the JVM options to limit memory usage
-ENV JAVA_OPTS="-Xmx256m -Xms128m"
+ENV JAVA_OPTS="-Xmx128m -Xms64m"
 
 # Set the SBT options to limit memory usage
-ENV SBT_OPTS="-Xmx256m -Xss256k"
+ENV SBT_OPTS="-Xmx128m -Xss128k"
 
 # Build your project (if necessary)
 RUN sbt compile
