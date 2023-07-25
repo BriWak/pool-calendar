@@ -24,6 +24,7 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala, AssemblyPlugin)
   .settings(
     scoverageSettings,
+    PlayKeys.playDefaultPort := 10000,
     assembly / assemblyMergeStrategy := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.first // Keep the first version found
       case "module-info.class" => MergeStrategy.first // Keep the first version found

@@ -10,5 +10,8 @@ COPY pool-calendar.jar /app/pool-calendar.jar
 # Set the JVM options to limit memory usage (optional)
 ENV JVM_OPTIONS="-Xmx512m -Xms512m"
 
+# Expose port 10000
+EXPOSE 10000
+
 # Run the JAR file with JVM_OPTIONS properly expanded
 CMD java $JVM_OPTIONS -jar pool-calendar.jar
