@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY pool-calendar.jar /app/pool-calendar.jar
+COPY pool-calendar-assembly-1.1.jar /app/pool-calendar.jar
 
 # Set the JVM options to limit memory usage (optional)
 ENV JVM_OPTIONS="-Xmx512m -Xms512m"

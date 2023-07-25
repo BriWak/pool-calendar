@@ -36,7 +36,7 @@ lazy val root = (project in file("."))
     inConfig(Test)(testSettings),
     name := """pool-calendar""",
     organization := "com.example",
-    version := "1.0",
+    version := "1.1",
     scalaVersion := "2.13.0",
     libraryDependencies += guice,
     libraryDependencies ++= AppDependencies(),
