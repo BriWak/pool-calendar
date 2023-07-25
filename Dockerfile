@@ -10,5 +10,5 @@ COPY pool-calendar.jar /app/pool-calendar.jar
 # Set the JVM options to limit memory usage (optional)
 ENV JVM_OPTIONS="-Xmx512m -Xms512m"
 
-# Run the JAR file
-CMD ["java", "$JVM_OPTIONS", "-jar", "pool-calendar.jar"]
+# Run the JAR file with JVM_OPTIONS properly expanded
+CMD java $JVM_OPTIONS -jar pool-calendar.jar
