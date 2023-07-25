@@ -13,5 +13,5 @@ ENV JVM_OPTIONS="-Xmx512m -Xms512m"
 # Expose port 10000
 EXPOSE 10000
 
-# Run the JAR file with JVM_OPTIONS properly expanded
-CMD java $JVM_OPTIONS -jar pool-calendar.jar
+# Run the JAR file with JVM_OPTIONS properly expanded and bind to 0.0.0.0
+CMD java $JVM_OPTIONS -Dhttp.address=0.0.0.0 -jar pool-calendar.jar
