@@ -24,7 +24,6 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala, AssemblyPlugin)
   .settings(
     scoverageSettings,
-    PlayKeys.playDefaultPort := 10000,
     assembly / assemblyMergeStrategy := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.first // Keep the first version found
       case "module-info.class" => MergeStrategy.first // Keep the first version found
@@ -36,7 +35,7 @@ lazy val root = (project in file("."))
     inConfig(Test)(testSettings),
     name := """pool-calendar""",
     organization := "com.example",
-    version := "1.1",
+    version := "1.2",
     scalaVersion := "2.13.0",
     libraryDependencies += guice,
     libraryDependencies ++= AppDependencies(),
