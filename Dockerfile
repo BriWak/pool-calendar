@@ -7,8 +7,14 @@ WORKDIR /app
 # Copy the code into the container
 COPY . /app
 
+# Set the JVM options to limit memory usage
+ENV JAVA_OPTS="-Xmx256m -Xms128m"
+
+# Set the SBT options to limit memory usage
+ENV SBT_OPTS="-Xmx256m -Xss256k"
+
 # Build your project (if necessary)
 RUN sbt compile
 
 # Run your application
-CMD ["sbt", "run"]
+CMD ["sbt", "-mem", "256", "run"]
