@@ -18,13 +18,10 @@ class HomeController @Inject()(cc: ControllerComponents,
                                fixtureService: FixtureService,
                                config:ApplicationConfig,
                                homePage: HomePage
-                              ) extends AbstractController(cc) with play.api.i18n.I18nSupport with Logging {
+                              ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def index: Action[AnyContent] = teamAction.async { implicit request =>
     fixtureService.getAllTeams.map { teams =>
-      logger.warn("*******************************************")
-      logger.warn(config.mongoUrI)
-      logger.warn("*******************************************")
       Ok(homePage(TeamForm.form, teams))
     }
   }
