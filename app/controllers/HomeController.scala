@@ -3,6 +3,7 @@ package controllers
 import conf.ApplicationConfig
 import controllers.auth.TeamAction
 import forms.TeamForm
+import play.api.Logging
 import play.api.mvc._
 import services.FixtureService
 import views.html.HomePage
@@ -17,13 +18,13 @@ class HomeController @Inject()(cc: ControllerComponents,
                                fixtureService: FixtureService,
                                config:ApplicationConfig,
                                homePage: HomePage
-                              ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+                              ) extends AbstractController(cc) with play.api.i18n.I18nSupport with Logging {
 
   def index: Action[AnyContent] = teamAction.async { implicit request =>
     fixtureService.getAllTeams.map { teams =>
-      println("*******************************************")
-      println(config.mongoUrI)
-      println("*******************************************")
+      logger.warn("*******************************************")
+      logger.warn(config.mongoUrI)
+      logger.warn("*******************************************")
       Ok(homePage(TeamForm.form, teams))
     }
   }
