@@ -1,5 +1,5 @@
 # Use a base image with the desired Scala and sbt version
-FROM hseeberger/scala-sbt:8u292_1.5.5_2.13.6
+FROM openjdk:11
 
 # Set the working directory inside the container
 WORKDIR /app
