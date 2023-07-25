@@ -30,7 +30,7 @@ object AppDependencies {
     "com.google.guava"             % "guava"                   % "30.1.1-jre",
     "com.fasterxml.jackson.core"   % "jackson-databind"        % "2.11.4",
     "com.fasterxml.jackson.core"   % "jackson-annotations"     % "2.10.5",
-    "org.slf4j"                    % "slf4j-api"               % "2.0.6",
+    "org.slf4j"                    % "slf4j-api"               % "1.7.30",
     "org.scala-lang.modules"       % "scala-java8-compat_2.13" % "1.0.2"
   )
 }
