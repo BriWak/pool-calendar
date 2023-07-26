@@ -32,6 +32,8 @@ lazy val root = (project in file("."))
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)
     },
+    (managedClasspath in Runtime) += (packageBin in Assets).value,
+    assembly / assemblyOutputPath := file("pool-calendar.jar"),
     inConfig(Test)(testSettings),
     name := """pool-calendar""",
     organization := "com.example",

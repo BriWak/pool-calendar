@@ -16,7 +16,6 @@ import scala.concurrent.Future
 class HomeController @Inject()(cc: ControllerComponents,
                                teamAction: TeamAction,
                                fixtureService: FixtureService,
-                               config:ApplicationConfig,
                                homePage: HomePage
                               ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 

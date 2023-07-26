@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the JAR and production.conf file into the container
-COPY pool-calendar-assembly-1.5.jar /app/pool-calendar.jar
+COPY pool-calendar.jar /app/pool-calendar.jar
 COPY conf/application.conf /app/application.conf
 COPY conf/production.conf /app/production.conf
 
