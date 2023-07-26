@@ -14,7 +14,7 @@ val ScoverageExclusionPatterns = List(
 lazy val scoverageSettings = {
   Seq(
     ScoverageKeys.coverageExcludedPackages := ScoverageExclusionPatterns.mkString("", ";", ""),
-    ScoverageKeys.coverageMinimum := 80,
+    ScoverageKeys.coverageMinimumStmtTotal := 80,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )
@@ -35,7 +35,7 @@ lazy val root = (project in file("."))
     inConfig(Test)(testSettings),
     name := """pool-calendar""",
     organization := "com.example",
-    version := "1.4",
+    version := "1.5",
     scalaVersion := "2.13.0",
     libraryDependencies += guice,
     libraryDependencies ++= AppDependencies(),
