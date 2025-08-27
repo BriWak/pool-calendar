@@ -24,20 +24,26 @@ abstract class IndexesManager @Inject()(
   val lastUpdatedIndexName: String
 
   lazy val collectionF: Future[BSONCollection] = {
-    mongo.database.flatMap { db =>
-      val coll = db.collection[BSONCollection](collectionName)
-      coll.indexesManager.ensure(
-          MongoIndex(
-            key = Seq("updatedAt" -> IndexType.Ascending),
-            name = lastUpdatedIndexName,
-            expireAfterSeconds = cacheTtl
-          )
-        ).map(_ => coll)
-        .andThen {
-          case scala.util.Success(_) => logger.info(s"✅ Indexes ensured for $collectionName")
-          case scala.util.Failure(ex) => logger.error(s"❌ Failed to ensure indexes for $collectionName", ex)
-        }
-    }
+    for {
+      _   <- ensureIndexes
+      res <- mongo.database.map(_.collection[BSONCollection](collectionName))
+    } yield res
+  }
+
+  def ensureIndexes: Future[Boolean] = {
+    val lastUpdatedIndex = MongoIndex(
+      key = Seq("updatedAt" -> IndexType.Ascending),
+      name = lastUpdatedIndexName,
+      expireAfterSeconds = cacheTtl
+    )
+
+    mongo.database
+      .flatMap(_.collection[BSONCollection](collectionName).indexesManager.ensure(lastUpdatedIndex))
+      .recover {
+        case ex =>
+          logger.error(s"Failed to ensure indexes for $collectionName", ex)
+          false
+      }
   }
 
   def findAndUpdateSession(selector: JsObject)(implicit rds: Reads[UserSession]): Future[Option[UserSession]] = {
