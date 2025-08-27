@@ -1,9 +1,8 @@
 package modules
 
 import play.api.inject.{SimpleModule, bind}
-
-import javax.inject._
 import repositories._
+
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
 
