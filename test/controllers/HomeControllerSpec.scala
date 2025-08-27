@@ -12,7 +12,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers._
 import play.api.test._
 import services.FixtureService
-import views.html.HomePage
+import views.html.{ErrorPage, HomePage}
 
 import scala.concurrent.Future
 
@@ -21,13 +21,14 @@ class HomeControllerSpec extends SpecBase {
   private val mockFixtureService = mock[FixtureService]
   private val fakeTeamAction = app.injector.instanceOf[TeamAction]
   private val view = app.injector.instanceOf[HomePage]
+  private val errorView = app.injector.instanceOf[ErrorPage]
 
   "HomeController GET for index page" should {
 
     "render the index page from a new instance of controller" in {
       when(mockFixtureService.getAllTeams).thenReturn(Future.successful(List.empty))
 
-      val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view)
+      val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view, errorView)
       val result = controller.index().apply(fakeRequest)
 
       status(result) mustBe OK
@@ -73,7 +74,7 @@ class HomeControllerSpec extends SpecBase {
       when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team("name","venue",1))))
       when(mockFixtureService.createCalendar(any())).thenReturn(Future.successful("calendar"))
 
-      val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view)
+      val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view, errorView)
       val result = controller.downloadCalendar().apply(FakeRequest(GET, "/download").withFormUrlEncodedBody("name" -> "validName"))
 
       status(result) mustBe OK

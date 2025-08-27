@@ -30,56 +30,59 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 abstract class IndexesManager @Inject()(
-                                         mongo: ReactiveMongoApi,
+                                         mongo: ReactiveMongoApi
                                        )(implicit ec: ExecutionContext) extends Logging {
 
-  implicit final val jsObjectWrites: OWrites[JsObject] = OWrites[JsObject](identity)
+  implicit final val jsObjectWrites: OWrites[JsObject] = OWrites(identity)
 
   val collectionName: String
-
   val cacheTtl: Option[Int]
-
   val lastUpdatedIndexName: String
 
-  def collection: Future[BSONCollection] =
+  lazy val collectionF: Future[BSONCollection] = {
     for {
-      _ <- ensureIndexes
+      _   <- ensureIndexes
       res <- mongo.database.map(_.collection[BSONCollection](collectionName))
     } yield res
+  }
 
   def ensureIndexes: Future[Boolean] = {
-
-    lazy val lastUpdatedIndex = MongoIndex(
+    val lastUpdatedIndex = MongoIndex(
       key = Seq("updatedAt" -> IndexType.Ascending),
       name = lastUpdatedIndexName,
       expireAfterSeconds = cacheTtl
     )
 
-    for {
-      collection <- mongo.database.map(_.collection[BSONCollection](collectionName))
-      createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
-    } yield createdLastUpdatedIndex
+    mongo.database
+      .flatMap(_.collection[BSONCollection](collectionName).indexesManager.ensure(lastUpdatedIndex))
+      .recover {
+        case ex =>
+          logger.error(s"Failed to ensure indexes for $collectionName", ex)
+          false
+      }
   }
 
   def findAndUpdateSession(selector: JsObject)(implicit rds: Reads[UserSession]): Future[Option[UserSession]] = {
-
     val modifier = Json.obj(
       "$set" -> Json.obj(
         "updatedAt" -> UserSession.dateTimeWrite.writes(DateTime.now)
       )
     )
-    collection.flatMap(_.findAndUpdate(
-      selector = selector,
-      update = modifier,
-      fetchNewObject = true,
-      upsert = false,
-      sort = None,
-      fields = None,
-      bypassDocumentValidation = false,
-      writeConcern = WriteConcern.Default,
-      maxTime = None,
-      collation = None,
-      arrayFilters = Nil)).map(_.result[UserSession])
 
+    collectionF.flatMap(
+      _.findAndUpdate(
+        selector = selector,
+        update = modifier,
+        fetchNewObject = true,
+        upsert = false,
+        sort = None,
+        fields = None,
+        bypassDocumentValidation = false,
+        writeConcern = WriteConcern.Default,
+        maxTime = None,
+        collation = None,
+        arrayFilters = Nil
+      ).map(_.result[UserSession])
+    )
   }
 }

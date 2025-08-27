@@ -5,19 +5,22 @@ import models.Team
 import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.Cursor
+import reactivemongo.api.bson.collection.BSONCollection
 import reactivemongo.play.json.compat.json2bson._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class TeamRepository @Inject()(
                       val reactiveMongoApi: ReactiveMongoApi
-                     ) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
+                     )(implicit ec: ExecutionContext) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
 
   override val collectionName: String = "Teams"
 
   override val cacheTtl: Option[Int] = None
 
   override val lastUpdatedIndexName: String = "teams-created-at-index"
+
+  def collection: Future[BSONCollection] = collectionF
 
   def create(value: Team): Future[Boolean] = {
     collection.flatMap(_.insert.one(value)).map(_.writeConcernError.isEmpty)
@@ -33,7 +36,7 @@ class TeamRepository @Inject()(
 
   def findAllTeams(): Future[List[Team]] = {
     val cursor = collection.map(_.find(Json.obj(), Some(Json.obj())).cursor[Team]())
-    cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[Team]]()))
+    cursor.flatMap(_.collect[List](1000, Cursor.FailOnError[List[Team]]()))
   }
 
   def updateTeam(value: Team, newValue: Team): Future[Boolean] ={

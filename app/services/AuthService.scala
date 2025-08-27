@@ -6,11 +6,10 @@ import com.google.inject.Inject
 import models.UserSession
 import repositories.SessionRepository
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AuthService @Inject()(sessionRepository: SessionRepository,
-                            passwordService: PasswordService) {
+                            passwordService: PasswordService)(implicit ec: ExecutionContext) {
 
   val passwordHash = "$2a$10$HKdRb9WT.acL1ODZqMtpJeFLtyClZLvvpKeGH2mhNU4hxcUzYOZEW"
 

@@ -4,12 +4,11 @@ import com.google.inject.Inject
 import models.{FixtureList, League, Team}
 import repositories.{FixtureRepository, LeagueRepository, TeamRepository}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class MongoService @Inject()(fixtureRepository: FixtureRepository,
                              teamRepository: TeamRepository,
-                             leagueRepository: LeagueRepository) {
+                             leagueRepository: LeagueRepository)(implicit ec: ExecutionContext) {
 
   def uploadLeague(league: League): Future[Boolean] = {
     leagueRepository.create(league)
