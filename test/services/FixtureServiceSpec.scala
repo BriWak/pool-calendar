@@ -67,7 +67,7 @@ class FixtureServiceSpec extends SpecBase {
 
       val result = fixtureService.getAllTeams
 
-      result.futureValue mustEqual teams
+      result.futureValue mustEqual teams.sorted
     }
   }
 
