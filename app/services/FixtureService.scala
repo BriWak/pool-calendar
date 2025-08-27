@@ -8,16 +8,17 @@ import models.{Fixture, Team}
 import repositories.{FixtureRepository, TeamRepository}
 import utils.DateHelper._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class FixtureService @Inject()(appConfig: ApplicationConfig,
                                teamRepository: TeamRepository,
-                               fixtureRepository: FixtureRepository) {
+                               fixtureRepository: FixtureRepository)(implicit ec: ExecutionContext) {
 
   def getAllFixturesForTeam(team: Team): Future[List[Fixture]] = {
-    fixtureRepository.findAllFixtures(team).map(fixtureList =>
-      fixtureList.get.fixtures)
+    fixtureRepository.findAllFixtures(team).map {
+      case Some(fixtureList) => fixtureList.fixtures
+      case None              => Nil
+    }
   }
 
   def getAllTeams: Future[List[Team]] = {

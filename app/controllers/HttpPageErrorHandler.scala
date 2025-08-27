@@ -17,10 +17,13 @@ class HttpPageErrorHandler @Inject()(errorPage: ErrorPage) extends HttpErrorHand
         Future.successful(NotFound(errorPage("The page you are looking for does not exist. Please check the URL")))
       case clientError if statusCode >= 400 && statusCode < 500 =>
         Future.successful(Forbidden(errorPage(s"status : $clientError")))
+      case _ =>
+        Future.successful(Status(statusCode)(errorPage(s"Client error $statusCode")))
     }
   }
 
   def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
-    Future.successful(InternalServerError(errorPage(exception.getMessage)))
+    val message: String = Option(exception.getMessage).getOrElse("An unexpected error occurred")
+    Future.successful(InternalServerError(errorPage(message)))
   }
 }

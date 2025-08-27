@@ -8,14 +8,13 @@ import services.AuthService
 import views.html.LoginPage
 
 import javax.inject._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class LoginController @Inject()(cc: ControllerComponents,
                                 teamAction: TeamAction,
                                 authService: AuthService,
-                                loginPage: LoginPage) extends AbstractController(cc) with I18nSupport {
+                                loginPage: LoginPage)(implicit ec: ExecutionContext) extends AbstractController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = teamAction {
     implicit request =>

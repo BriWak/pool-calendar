@@ -6,20 +6,22 @@ import models.UserSession
 import org.joda.time.DateTime
 import play.api.libs.json._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
+import reactivemongo.api.bson.collection.BSONCollection
 import reactivemongo.play.json.compat.json2bson._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SessionRepository @Inject()(val reactiveMongoApi: ReactiveMongoApi,
                                   config: ApplicationConfig
-                                 ) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
+                                 )(implicit ec: ExecutionContext) extends IndexesManager(reactiveMongoApi) with ReactiveMongoComponents {
 
   override val collectionName: String = "Session"
 
   override val cacheTtl: Option[Int] = Some(config.expireAfterSeconds)
 
   override val lastUpdatedIndexName: String = "updatedAt_index"
+
+  def collection: Future[BSONCollection] = collectionF
 
   def set(session: UserSession): Future[Boolean] = {
     val modifier = Json.obj("$set" -> session.copy(updatedAt = DateTime.now))

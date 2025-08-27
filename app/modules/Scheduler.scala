@@ -13,22 +13,17 @@ import scala.concurrent.duration.DurationInt
 class SchedulerModule extends SimpleModule(bind[Scheduler].toSelf.eagerly())
 
 class Scheduler @Inject()(system: ActorSystem, ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
-    system.scheduler.scheduleWithFixedDelay(initialDelay = 0.seconds, delay = 10.minutes) {
-      () => makeHttpRequestToKeepAlive()
-    }(system.dispatcher)
+  system.scheduler.scheduleWithFixedDelay(initialDelay = 0.seconds, delay = 10.minutes) {
+    () => keepAppAlive()
+  }(system.dispatcher)
 
-  private def makeHttpRequestToKeepAlive(): Unit = {
-    val keepAliveUrl = (s"${appConfig.baseUrl}${controllers.routes.KeepAliveController.keepAlive.url}")
-
-    ws.url(keepAliveUrl)
+  private def keepAppAlive(): Unit = {
+    ws.url(s"${appConfig.baseUrl}${controllers.routes.KeepAliveController.keepAlive.url}")
       .get()
       .map { response =>
-        response.status match {
-          case OK =>
-            system.log.info(s"HTTP call successful. Status: 200")
-          case _ =>
-            system.log.info(s"HTTP call failed. Error: ${response.body}")
-        }
+        if (response.status == OK) system.log.info("Keep-alive succeeded")
+        else system.log.warning(s"Keep-alive failed: ${response.status}")
       }
+      .recover { case ex => system.log.error(ex, "Keep-alive request failed") }
   }
 }
