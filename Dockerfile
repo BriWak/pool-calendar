@@ -9,9 +9,6 @@ COPY pool-calendar.jar /app/pool-calendar.jar
 COPY conf/application.conf /app/application.conf
 COPY conf/production.conf /app/production.conf
 
-# Install netcat
-RUN apt-get update && apt-get install -y netcat && rm -rf /var/lib/apt/lists/*
-
 # Set the JVM options to limit memory usage (optional)
 ENV JVM_OPTIONS="-Xmx512m -Xms512m"
 
