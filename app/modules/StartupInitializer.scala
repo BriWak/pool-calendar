@@ -1,10 +1,8 @@
 package modules
 
 import play.api.inject.{SimpleModule, bind}
-
-import javax.inject._
 import repositories._
-
+import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
 
 class StartupModule extends SimpleModule(bind[StartupInitializer].toSelf.eagerly())
@@ -17,18 +15,17 @@ class StartupInitializer @Inject()(
                                     fixtureRepo: FixtureRepository
                                   )(implicit ec: ExecutionContext) {
 
-  // Trigger collectionF for all repositories at startup
-  private val init: Future[Unit] = {
-    val allCollections = Seq(
-      leagueRepo.collectionF,
-      teamRepo.collectionF,
-      sessionRepo.collectionF,
-      fixtureRepo.collectionF
-    )
+  private val allCollections: Seq[Future[_]] = Seq(
+    leagueRepo.collectionF,
+    teamRepo.collectionF,
+    sessionRepo.collectionF,
+    fixtureRepo.collectionF
+  )
 
-    Future.sequence(allCollections).map(_ => ())
-  }
-
-  // Eager initialization
-  init.onComplete(_ => println("✅ All Mongo collections initialized with indexes"))
+  Future.sequence(allCollections)
+    .map(_ => ())
+    .andThen {
+      case scala.util.Success(_) => println("✅ All Mongo collections initialized with indexes")
+      case scala.util.Failure(ex) => println(s"❌ Error initializing Mongo collections: ${ex.getMessage}")
+    }
 }
