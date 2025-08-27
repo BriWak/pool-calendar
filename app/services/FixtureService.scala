@@ -22,11 +22,11 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
   }
 
   def getAllTeams: Future[List[Team]] = {
-    teamRepository.findAllTeams()
+    teamRepository.findAllTeams().map(_.sorted)
   }
 
   def getAllTeamNames: Future[List[String]] = {
-    teamRepository.findAllTeams().map(_.map(team => team.name))
+    teamRepository.findAllTeams().map(_.sorted.map(team => team.name))
   }
 
   def getTeamFromName(name: String): Future[Option[Team]] = {

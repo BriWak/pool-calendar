@@ -16,5 +16,8 @@ object Team {
 
     Team(name, venue, number)
   }
+
+  implicit val ordering: Ordering[Team] = Ordering.by(_.name)
+
 }
 
