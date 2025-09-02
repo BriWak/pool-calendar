@@ -68,8 +68,10 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
       )
 
       val calenderFixtures = allFixturesForTeam.zipWithIndex.flatMap {
-        data =>
-          val (fixture, index) = data
+        case (fixture, index) =>
+          val rawLocation = s"${fixture.venue}${fixture.address.fold("")(l => s", $l")}"
+          val escapedLocation = rawLocation.replace(",", "\\,")
+
           List(
             "BEGIN:VEVENT",
             s"DTSTAMP:${getDateAsString(LocalDate.now())}T${getTimeAsString(LocalTime.now())}Z",
@@ -77,7 +79,7 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
             s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T$startTime",
             s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T$endTime",
             s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}",
-            s"LOCATION:${fixture.venue}${fixture.address.fold("")(l => s", $l")}",
+            s"LOCATION:$escapedLocation",
             "END:VEVENT"
           )
       }
