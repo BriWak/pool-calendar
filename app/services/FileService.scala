@@ -28,9 +28,21 @@ class FileService @Inject()(fileConnector: FileConnector,
   }
 
   def getTeams(processedCsv: List[String] = fileConnector.processCsvFile): List[Team] = {
-    val teamPattern = """(\d+)\ ([a-zA-z -]+)""".r
-    teamPattern.findAllMatchIn(processedCsv.mkString("\n"))
-      .map(m => Team(m.group(2).trim, m.group(1).toInt)).toList.sortBy(_.number)
+    val teamPattern = "^([0-9]+)\\s+([A-Za-z -]+)(?:,\\s*(.*))?$".r
+
+    def splitCsvLine(line: String): List[String] =
+      line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1)
+        .toList
+        .map(_.trim.stripPrefix("\"").stripSuffix("\""))
+
+    processedCsv
+      .flatMap(line => splitCsvLine(line))
+      .flatMap {
+        case teamPattern(number, name, addr) =>
+          Some(Team(number.toInt, name.trim, Option(addr).map(_.trim).filter(_.nonEmpty)))
+        case _ => None
+      }
+      .sortBy(_.number)
   }
 
   def getFixturesForTeam(team: Team): FixtureList = {

@@ -71,7 +71,7 @@ class HomeControllerSpec extends SpecBase {
   "HomeController GET for download" should {
 
     "create the download from a new instance of controller" in {
-      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team("name","venue",1))))
+      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team(1, "name", "venue", None))))
       when(mockFixtureService.createCalendar(any())).thenReturn(Future.successful("calendar"))
 
       val controller = new HomeController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view, errorView)

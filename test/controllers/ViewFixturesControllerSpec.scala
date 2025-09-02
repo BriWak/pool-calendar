@@ -24,13 +24,13 @@ class ViewFixturesControllerSpec extends SpecBase {
   private val view = app.injector.instanceOf[ViewFixturesPage]
 
   private val fixtures = List(
-    Fixture(convertStringToDate("05/09/19"), Team("Comrades A", 3), Team("Annitsford Irish B", 8))
+    Fixture(convertStringToDate("05/09/19"), Team(3, "Comrades A"), Team(8, "Annitsford Irish B"))
   )
 
   "ViewFixturesController GET for index page" should {
 
     "render the fixtures page from a new instance of controller" in {
-      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team("Annitsford Irish B", 8))))
+      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team(8, "Annitsford Irish B"))))
       when(mockFixtureService.getAllFixturesForTeam(any())).thenReturn(Future.successful(fixtures))
 
       val controller = new ViewFixturesController(stubControllerComponents(), fakeTeamAction, mockFixtureService, view)
@@ -49,7 +49,7 @@ class ViewFixturesControllerSpec extends SpecBase {
             api.inject.bind[FixtureService].toInstance(mockFixtureService)
           ).build
 
-      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team("Annitsford Irish B", 8))))
+      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team(8, "Annitsford Irish B"))))
       when(mockFixtureService.getAllFixturesForTeam(any())).thenReturn(Future.successful(fixtures))
 
       val controller = app.injector.instanceOf[ViewFixturesController]
@@ -68,7 +68,7 @@ class ViewFixturesControllerSpec extends SpecBase {
             api.inject.bind[FixtureService].toInstance(mockFixtureService)
           ).build
 
-      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team("Annitsford Irish B", 8))))
+      when(mockFixtureService.getTeamFromName(any())).thenReturn(Future.successful(Some(Team(8, "Annitsford Irish B"))))
       when(mockFixtureService.getAllFixturesForTeam(any())).thenReturn(Future.successful(fixtures))
 
       val result = route(application, FakeRequest(GET, "/fixtures/Annitsford%20Irish%20B")).get
