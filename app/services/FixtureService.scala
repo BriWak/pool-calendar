@@ -43,7 +43,7 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
       val calendarStart = List(
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//https://bdpl-fixtures.herokuapp.com//NONSGML v1.0//EN",
+        "PRODID:-//https://bdpl-fixtures.onrender.com//NONSGML v1.0//EN",
         "X-WR-CALNAME:Pool Fixtures",
         "CALSCALE:GREGORIAN",
         "BEGIN:VTIMEZONE",
@@ -77,7 +77,7 @@ class FixtureService @Inject()(appConfig: ApplicationConfig,
             s"DTSTART;TZID=Europe/London:${getDateAsString(fixture.date)}T$startTime",
             s"DTEND;TZID=Europe/London:${getDateAsString(fixture.date)}T$endTime",
             s"SUMMARY:${fixture.homeTeam.name} v ${fixture.awayTeam.name}",
-            s"LOCATION:${fixture.venue}",
+            s"LOCATION:${fixture.venue}${fixture.address.fold("")(l => s", $l")}",
             "END:VEVENT"
           )
       }
