@@ -28,7 +28,7 @@ class HomeController @Inject()(
   }
 
   def downloadCalendar: Action[AnyContent] = teamAction.async { implicit request =>
-    TeamForm.form.bindFromRequest.fold(
+    TeamForm.form.bindFromRequest().fold(
       formWithErrors =>
         Future.successful(BadRequest(formWithErrors.errors.toString)),
 

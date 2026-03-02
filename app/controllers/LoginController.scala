@@ -23,7 +23,7 @@ class LoginController @Inject()(cc: ControllerComponents,
 
   def onSubmit: Action[AnyContent] = teamAction.async {
     implicit request =>
-      UserLoginForm.form().bindFromRequest.fold(
+      UserLoginForm.form().bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(loginPage(formWithErrors, Some("Invalid Username or Password"))))
         },
