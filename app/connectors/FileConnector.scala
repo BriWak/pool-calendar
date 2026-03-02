@@ -19,7 +19,7 @@ class FileConnector @Inject()(environment: Environment) extends Logging {
   def processCsvFile: List[String] = {
     val bufferedSource = Source.fromFile(path)
 
-    val csv: List[String] = bufferedSource.getLines.toList.filterNot(_ == "").toList
+    val csv: List[String] = bufferedSource.getLines().toList.filterNot(_ == "").toList
     bufferedSource.close
     csv
   }

@@ -1,0 +1,11 @@
+target/
+.idea/
+.bsp/
+.git/
+.gitignore
+*.md
+logs/
+project/target/
+project/project/
+.cache/
+node_modules/
