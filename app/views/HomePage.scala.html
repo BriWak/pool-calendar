@@ -11,18 +11,21 @@
 @(teamForm: Form[TeamForm], teams: Seq[Team])(implicit request: TeamRequest[_], messages: Messages)
 
 @main("BDPL Fixture Downloader", request.teamList) {
-<div class="center">
-    <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="">
-    <h1>Download Fixtures</h1>
-    <p>This will download a calendar containing all of the selected team's fixtures for the current season and give you the option to add them to your calendar.</p>
-    @formHelper(action = routes.HomeController.downloadCalendar){
-    @select(
-        field = teamForm("name"),
-        options = teams.map(team => (team.name.toString -> team.name.toString)),
-        Symbol("_label") -> "Select the team you want to download fixtures for:",
-        Symbol("_showConstraints") -> false
-    )
-    <input type="submit" class="button" value="Download Calendar">
-    }
-</div>
+    <div>
+        <img src="@routes.Assets.versioned("images/BDPL.jpg")" id="header-img" alt="BDPL header">
+        <h1>Download Fixtures</h1>
+        <p>This will download a calendar containing all of the selected team's fixtures for the current season and give you the option to add them to your calendar.</p>
+
+        @formHelper(action = routes.HomeController.downloadCalendar){
+            @select(
+                field = teamForm("name"),
+                options = teams.map(team => (team.name.toString -> team.name.toString)),
+                Symbol("_label") -> "Select the team you want to download fixtures for:",
+                Symbol("_showConstraints") -> false
+            )
+            <div style="margin-top:12px">
+                <input type="submit" class="button" value="Download Calendar">
+            </div>
+        }
+    </div>
 }

@@ -1,3 +1,25 @@
+:root {
+    --brand-blue: #2563eb;   /* bright blue */
+    --brand-dark: #1e3a8a;   /* deep navy */
+    --nav-bg: #0f172a;
+    --surface: #111827;
+    --text: #000000;
+    --muted: #94a3b8;
+    --card:#f8fafc;
+    --danger:#ef4444;
+    --shadow: 0 6px 20px rgba(2,6,23,0.12);
+    --radius:12px;
+    --font-sans: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding-top: 68px;
+    font-family: Inter, Roboto, Arial, sans-serif;
+    background: #f8fafc;
+    color: var(--text);
+}
+
 body {
     margin: 0;
     padding-top: 40px;
@@ -7,9 +29,9 @@ ul.topnav {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background-color: #333;
+    background: linear-gradient(180deg, var(--nav-bg), var(--surface));
     position: fixed;
-
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.5);
     top: 0;
     width: 100%;
 }
@@ -27,11 +49,11 @@ ul.topnav li a {
 }
 
 ul.topnav li a:hover:not(.active) {
-    background-color: #111;
+    background-color: var(--brand-dark);
     }
 
 ul.topnav li a.active {
-    background-color: #4CAF50;
+    background-color: var(--brand-blue);
     }
 
 ul.topnav li.right {
@@ -47,10 +69,15 @@ ul.topnav li.title {
     position: absolute;
     transform: translateX(-50%);
     left: 50%;
+    font-weight: 700;
     font-size: 220%;
-    font-weight: bold;
-    text-shadow: 2px 2px grey;
+    text-transform: uppercase;
+    text-shadow: 2px 2px #333;
+    letter-spacing: 0.8px;
 }
+
+.title-bdpl { color: var(--brand-blue); }
+.title-fixtures { color: white; }
 
 ul.topnav .dropdown-content {
     display: none;
@@ -61,7 +88,7 @@ ul.topnav .dropdown-content {
 
 ul.topnav .dropdown-content a {
     color: white;
-    background-color: #333;
+    background-color: var(--nav-bg);
 }
 
 ul.topnav .show {
