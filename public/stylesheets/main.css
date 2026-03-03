@@ -1,11 +1,20 @@
+body {
+    font-family: Inter, Roboto, Arial, sans-serif;
+    background: #f8fafc;
+    color: var(--text);
+}
+
 .content {
-    font-family: 'roboto', sans-serif;
+    font-family: var(--font-sans);
     text-align: center;
-    margin: auto;
-    margin-top: 10px;
-    width: 50%;
-    border: 3px solid green;
-    padding: 5px;
+    margin: 12px auto;
+    width: 100%;
+    max-width: 900px;
+    padding: 16px;
+    background: linear-gradient(180deg, var(--card), #ffffff); /* light gradient for depth */
+    border-radius: var(--radius);                              /* rounded corners */
+    box-shadow: var(--shadow);                                 /* soft shadow separation */
+    color: #0b1220;
 }
 
 img {
@@ -22,7 +31,7 @@ img {
     padding: 1rem 2rem;
     margin: 0;
     text-decoration: none;
-    background: #4CAF50;
+    background: var(--brand-blue);
     color: #ffffff;
     font-family: sans-serif;
     font-size: 1rem;
@@ -36,7 +45,7 @@ img {
 
 .button:hover,
 .button:focus {
-    background: #434343;
+    background: var(--brand-dark);
 }
 
 .button:focus {
@@ -98,7 +107,7 @@ p {
 
 .inputfile:focus + label {
 	outline: 1px dotted #000;
-	outline: green auto 5px;
+	outline: var(--brand-blue) auto 5px;
 }
 
 
@@ -107,7 +116,7 @@ p {
     color: black;
     padding: 20px;
     background-color: lightgrey;
-    outline: green solid 3px;
+    outline: var(--brand-blue) solid 3px;
     margin: 20px;
     padding: 10px;
     text-align: center;
@@ -153,14 +162,14 @@ p {
 #fixtureTable th {
     padding-top: 12px;
     padding-bottom: 12px;
-    text-align: centre;
-    background-color: #4CAF50;
+    text-align: center;
+    background-color: var(--brand-dark);
     color: white;
 }
 
 .gameWeek {
     font-weight: bold;
-    border: 3px solid green;
+    border: 3px solid var(--brand-dark);
 }
 
 .leagues {

@@ -7,32 +7,36 @@
 @(loginForm: Form[UserLoginForm], errorMsg: Option[String] = None)(implicit request: TeamRequest[_], messagesProvider: MessagesProvider)
 @main("Login", request.teamList) {
 
+    <div id="loginCard">
     @formHelper(action = controllers.routes.LoginController.onSubmit, Symbol("id") -> "login") {
         <h1 id="loginTitle">Enter your login details</h1>
-        @if(errorMsg.isDefined) {
-            <p class="error">@errorMsg</p>
-        }
+        <div id="loginFormInner">
+            @if(errorMsg.isDefined) {
+                <p class="error">@errorMsg</p>
+            }
 
-        @inputText(
-            loginForm("username"),
-            Symbol("placeholder") -> "Username",
-            Symbol("autocomplete") -> "username",
-            Symbol("_showConstraints") -> false,
-            Symbol("id") -> "loginInput",
-            Symbol("_label") -> "",
-            Symbol("required") -> ""
-        )
+            @inputText(
+                loginForm("username"),
+                Symbol("placeholder") -> "Username",
+                Symbol("autocomplete") -> "username",
+                Symbol("_showConstraints") -> false,
+                Symbol("class") -> "login-input",
+                Symbol("_label") -> "",
+                Symbol("required") -> ""
+            )
 
-        @inputPassword(
-            loginForm("password"),
-            Symbol("placeholder") -> "Password",
-            Symbol("autocomplete") -> "password",
-            Symbol("_showConstraints") -> false,
-            Symbol("id") -> "loginInput",
-            Symbol("_label") -> "",
-            Symbol("required") -> ""
-        )
+            @inputPassword(
+                loginForm("password"),
+                Symbol("placeholder") -> "Password",
+                Symbol("autocomplete") -> "current-password",
+                Symbol("_showConstraints") -> false,
+                Symbol("class") -> "login-input",
+                Symbol("_label") -> "",
+                Symbol("required") -> ""
+            )
 
-        <input type="submit" value="submit" id="loginButton">
+            <input type="submit" value="Sign in" id="loginButton">
+        </div>
     }
+    </div>
 }

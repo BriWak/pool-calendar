@@ -12,19 +12,19 @@
 <html lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <head>
-        @* Here's where we render the page title `String`. *@
         <title>@title</title>
         <link rel="apple-touch-icon" sizes="152x152" href="@routes.Assets.versioned("images/apple-touch-icon.png")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/navbar.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/login.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-
     </head>
     <body>
 
         <ul class="topnav">
-            <li class="title">BDPL Fixtures</li>
+            <li class="title">
+                <span class="title-bdpl">BDPL</span> <span class="title-fixtures">FIXTURES</span>
+            </li>
             <li><a class="@("active".when(title == "BDPL Fixture Downloader"))" href="@{controllers.routes.HomeController.index.url}">Home</a></li>
             <li class="dropdown">
                 <a class="dropbtn caret-down @("active".when(title == "View Fixtures"))" onclick="myFunction()" href="#">View Fixtures </a>
@@ -38,9 +38,9 @@
         </ul>
 
         <div class="content">
-            @content
+        @content
         </div>
 
-      <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
     </body>
 </html>
