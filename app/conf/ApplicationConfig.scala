@@ -1,7 +1,7 @@
 package conf
 
 import javax.inject._
-import play.api.{Configuration, Environment}
+import play.api.Configuration
 
 @Singleton
 class ApplicationConfig @Inject()(
@@ -13,7 +13,6 @@ class ApplicationConfig @Inject()(
   }
 
   val baseUrl: String = loadConfig("base.url")
-  val fixturesFilePath: String = loadConfig("fixtures.file.path")
   val fixtureStartTime: String = loadConfig("fixture.start.time")
   val fixtureEndTime: String = loadConfig("fixture.end.time")
   val expireAfterSeconds: Int = loadConfig("mongodb.expireAfterSeconds").toInt
