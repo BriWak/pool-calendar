@@ -18,7 +18,7 @@ class UploadController @Inject()(cc: ControllerComponents,
                                  mongoService: MongoService,
                                  uploadPage: UploadPage)
                                 (implicit ec: ExecutionContext
-                                ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
+                                ) extends AbstractController(cc) with play.api.i18n.I18nSupport with play.api.Logging {
 
   def onPageLoad: Action[AnyContent] = (authAction andThen teamAction).async { implicit request =>
     mongoService.getLeagues.map { leagues =>
@@ -47,7 +47,8 @@ class UploadController @Inject()(cc: ControllerComponents,
             }
           )
         }.recoverWith {
-        case _ =>
+        case e =>
+          logger.error("There has been a problem saving the fixture information", e)
           Future.successful(Ok(uploadPage("There has been a problem saving the fixture information to the database.", List(), hasSubmitted = true)))
       }
   }
