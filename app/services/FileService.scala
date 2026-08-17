@@ -4,7 +4,7 @@ import java.io.File
 import java.time.LocalDate
 
 import com.google.inject.Inject
-import conf.ApplicationConfig
+import play.api.Environment
 import connectors.FileConnector
 import models.{Fixture, FixtureList, FixtureWeek, Team}
 import play.api.libs.Files
@@ -13,14 +13,14 @@ import utils.DateHelper._
 import utils.LeagueHelper._
 
 class FileService @Inject()(fileConnector: FileConnector,
-                            appConfig: ApplicationConfig) {
+                           environment: Environment) {
 
   def saveFile(file: MultipartFormData.FilePart[Files.TemporaryFile]): Either[String, String] = {
     val filename = file.filename.trim
     if (filename.takeRight(4) != ".csv") {
       Left("The file type is incorrect, only CSV files are supported.")
     } else if (leagues.contains(filename.dropRight(4))) {
-      file.ref.moveTo(new File(s"${appConfig.fixturesFilePath}Pool fixtures.csv"), replace = true)
+      file.ref.moveTo(new File(s"${environment.rootPath}/Pool fixtures.csv"), replace = true)
       Right(filename.dropRight(4))
     } else {
       Left("The file name is incorrect, it must be the name of the league.")
