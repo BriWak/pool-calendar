@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/pool-calendar -Dhttp.port=${PORT} -Dconfig.resource=production.conf
+web: target/universal/stage/bin/pool-calendar -Dhttp.port=${PORT} -Dconfig.resource=production.conf -J-Xmx220m -J-Xms64m -J-Xss256k -J-XX:MaxMetaspaceSize=128m -J-XX:+UseG1GC -J-XX:G1PeriodicGCInterval=15000

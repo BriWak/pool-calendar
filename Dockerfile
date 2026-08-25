@@ -60,8 +60,9 @@ CMD ["./app/bin/pool-calendar", \
     "-Dhttp.port=9000", \
     "-Dplay.http.secret.key=${APPLICATION_SECRET}", \
     "-Dconfig.resource=production.conf", \
-    "-J-Xmx256m", "-J-Xms128m", \
-    "-J-Xss512k", \
+    "-J-Xmx220m", \
+    "-J-Xms64m", \
+    "-J-Xss256k", \
     "-J-XX:+UseG1GC", \
     "-J-XX:MaxGCPauseMillis=100", \
     "-J-XX:+UseStringDeduplication", \
